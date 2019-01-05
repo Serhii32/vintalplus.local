@@ -13,6 +13,10 @@
 
 Auth::routes();
 
+Route::match(['get', 'post'], 'register', function(){
+    return redirect('/');
+});
+
 Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['localizationRedirect']], function() {
 
 	Route::get('/', ['as' => 'page.index', 'uses' => 'PagesController@index']);
@@ -31,7 +35,31 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
 
 	Route::get('projects', ['as' => 'page.projects', 'uses' => 'PagesController@projects']);
 
+	Route::get('catalog', ['as' => 'page.catalog', 'uses' => 'PagesController@catalog']);
+
+	Route::get('categories', ['as' => 'page.categories', 'uses' => 'PagesController@categories']);
+
 	Route::get('jobs', ['as' => 'page.jobs', 'uses' => 'PagesController@jobs']);
+
+	Route::get('records', ['as' => 'page.records', 'uses' => 'PagesController@records']);
+
+	Route::get('services', ['as' => 'page.services', 'uses' => 'PagesController@services']);
+
+	Route::get('article/{articleId}', ['as' => 'page.article', 'uses' => 'PagesController@article']);
+
+	Route::get('category/{categoryId}', ['as' => 'page.category', 'uses' => 'PagesController@category']);
+
+	Route::get('product/{productId}', ['as' => 'page.product', 'uses' => 'PagesController@product']);
+
+	Route::get('record/{recordId}', ['as' => 'page.record', 'uses' => 'PagesController@record']);
+
+	Route::get('project/{projectId}', ['as' => 'page.project', 'uses' => 'PagesController@project']);
+
+	Route::get('service/{serviceId}', ['as' => 'page.service', 'uses' => 'PagesController@service']);
+
+	Route::post('order',['as' => 'order', 'uses' => 'PagesController@order']);
+
+	Route::get('search', ['as' => 'page.search', 'uses' => 'PagesController@search']);
 
 });
 
@@ -42,88 +70,44 @@ Route::group(['namespace' => 'Admin', 'middleware' => 'auth', 'as' => 'admin.', 
 	Route::match(['put', 'patch'], 'home/store', ['as' => 'home.update', 'uses' => 'HomeController@update']);
 
 	Route::resource('productsCategories', 'ProductsCategoriesController')->except(['create', 'show']);
+	
+	Route::delete('productsCategories/removeProductFromCategory/{productId}', ['as' => 'productsCategories.removeProductFromCategory', 'uses' => 'ProductsCategoriesController@removeProductFromCategory']);
 
 	Route::resource('products', 'ProductsController')->except(['show']);
 
+	Route::get('products/copy/{product}/{url}', ['as' => 'products.copy', 'uses' => 'ProductsController@copy']);
+
+	Route::resource('articles', 'ArticlesController')->except(['show']);
+
+	Route::resource('attributes', 'AttributesController')->except(['show']);
+
+	Route::resource('records', 'RecordsController')->except(['show']);
+
+	Route::resource('projects', 'ProjectsController')->except(['show']);
+
+	Route::resource('partners', 'PartnersController')->except(['show']);
+
+	Route::resource('services', 'ServicesController')->except(['show']);
+
+	Route::get('pages/jobsEdit', ['as' => 'pages.jobsEdit', 'uses' => 'PagesController@jobsEdit']);
+
+	Route::match(['put', 'patch'], 'pages/jobsUpdate', ['as' => 'pages.jobsUpdate', 'uses' => 'PagesController@jobsUpdate']);
+
+	Route::get('pagesSEO', ['as' => 'pagesSEO.index', 'uses' => 'SEOController@index']);
+
+	Route::put('pagesSEO/update', ['as' => 'pagesSEO.update', 'uses' => 'SEOController@update']);
+
+	Route::get('products/productAttributeDestroy/{productId}/{attributeNameId}/{attributeValueId}', ['as' => 'products.productAttributeDestroy', 'uses' => 'ProductsController@productAttributeDestroy']);
+
+	Route::post('upload-image', ['as' => 'upload-image', 'uses' => 'CKEditorImageController@uploadImage']);
+	Route::get('uploaded-images', ['as' => 'uploaded-images.index', 'uses' => 'CKEditorImageController@index']);
+	Route::delete('uploaded-images/{imageName}', ['as' => 'uploaded-images.destroy', 'uses' => 'CKEditorImageController@destroy']);
+
 });
-
-
-
-
 
 /*
 
-Route::get('products-category-page/{categoryId}', ['as' => 'page.products-category', 'uses' => 'FrontPagesController@categoryProductsServices']);
+add order via ajax to email
+add translation
 
-Route::get('product-page/{productId}', ['as' => 'page.product', 'uses' => 'FrontPagesController@productPage']);
-
-Route::get('records', ['as' => 'page.records', 'uses' => 'FrontPagesController@records']);
-
-Route::get('records-category-page/{categoryId}', ['as' => 'page.records-category', 'uses' => 'FrontPagesController@categoryRecords']);
-
-Route::get('record-page/{recordId}', ['as' => 'page.record', 'uses' => 'FrontPagesController@recordPage']);
-
-Route::get('search', ['as' => 'page.search', 'uses' => 'FrontPagesController@search']);
-
-Route::group(['namespace' => 'Admin', 'middleware' => ['auth', 'isAdmin'], 'as' => 'admin.', 'prefix'=>'admin'], function () {
-
-	Route::get('home', ['as' => 'home.index', 'uses' => 'HomeController@index']);
-	Route::get('home/edit', ['as' => 'home.edit', 'uses' => 'HomeController@edit']);
-	Route::match(['put', 'patch'], 'home/store', ['as' => 'home.update', 'uses' => 'HomeController@update']);
-	
-	// Route::group(['middleware' => 'verified'], function () {
-
-		Route::resource('productsCategories', 'ProductsCategoriesController')->except(['create', 'show']);
-
-		Route::delete('productsCategories/removeProductFromCategory/{productId}', ['as' => 'productsCategories.removeProductFromCategory', 'uses' => 'ProductsCategoriesController@removeProductFromCategory']);
-
-		Route::resource('recordsCategories', 'RecordsCategoriesController')->except(['create', 'show']);
-
-		Route::delete('recordsCategories/removeRecordFromCategory/{recordId}', ['as' => 'recordsCategories.removeRecordFromCategory', 'uses' => 'RecordsCategoriesController@removeRecordFromCategory']);
-
-		Route::post('upload-image', ['as' => 'upload-image', 'uses' => 'CKEditorImageUploadController@uploadImage']);
-		Route::get('uploaded-images', ['as' => 'uploaded-images.index', 'uses' => 'CKEditorImageUploadController@index']);
-		Route::delete('uploaded-images/{imageName}', ['as' => 'uploaded-images.destroy', 'uses' => 'CKEditorImageUploadController@destroy']);
-		
-		Route::resource('records', 'RecordsController')->except(['show']);
-
-		Route::get('products/productAttributeDestroy/{productId}/{attributeNameId}/{attributeValueId}', ['as' => 'products.productAttributeDestroy', 'uses' => 'ProductsController@productAttributeDestroy']);
-
-		Route::resource('products', 'ProductsController')->except(['show']);
-
-		Route::resource('attributes', 'AttributesController')->except(['show']);
-
-		Route::get('users', ['as' => 'users.index', 'uses' => 'UsersController@index']);
-
-		Route::get('users/{user}/show', ['as' => 'users.show', 'uses' => 'UsersController@show']);
-
-		Route::delete('users/{user}', ['as' => 'users.destroy', 'uses' => 'UsersController@destroy']);
-
-		Route::get('orders', ['as' => 'orders.index', 'uses' => 'OrdersController@index']);
-
-		Route::match(['put', 'patch'], 'orders/{order}', ['as' => 'orders.update', 'uses' => 'OrdersController@update']);
-
-		Route::delete('orders/{order}', ['as' => 'orders.destroy', 'uses' => 'OrdersController@destroy']);
-
-		Route::get('pagesSEO', ['as' => 'pagesSEO.index', 'uses' => 'SEOController@index']);
-
-		Route::put('pagesSEO/update', ['as' => 'pagesSEO.update', 'uses' => 'SEOController@update']);
-
-	// });
-
-});
-
-Route::group(['namespace' => 'User', 'middleware' => ['auth', 'isUser'], 'as' => 'user.', 'prefix'=>'user'], function () {
-
-	Route::get('home/edit', ['as' => 'home.edit', 'uses' => 'HomeController@edit']);
-	Route::match(['put', 'patch'], 'home/store', ['as' => 'home.update', 'uses' => 'HomeController@update']);
-	Route::delete('home/destroy', ['as' => 'home.destroy', 'uses' => 'HomeController@destroy']);
-	
-	// Route::group(['middleware' => 'verified'], function () {
-		Route::get('home', ['as' => 'home.index', 'uses' => 'HomeController@index']);
-		Route::match(['put', 'patch'], 'home/cancel-order/{order}', ['as' => 'home.cancel-order', 'uses' => 'HomeController@cancelOrder']);
-	// });
-});
-
-//add attributes managing values
 */

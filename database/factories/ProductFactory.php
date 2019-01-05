@@ -6,7 +6,7 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 $factory->define(App\Product::class, function (Faker $faker) {
     $output = [
     	'price' => $faker->randomFloat(2, 0, 1000000),
-    	'category_id' => $faker->biasedNumberBetween(1, 10),
+    	'category_id' => $faker->biasedNumberBetween(1, 6),
 	];
     foreach(LaravelLocalization::getLocalesOrder() as $code => $locale)
     {

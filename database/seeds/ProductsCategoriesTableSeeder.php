@@ -11,6 +11,6 @@ class ProductsCategoriesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\ProductsCategory::class, 10)->create();
+        factory(App\ProductsCategory::class, 6)->create();
     }
 }

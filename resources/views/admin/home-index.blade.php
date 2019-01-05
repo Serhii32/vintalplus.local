@@ -21,7 +21,7 @@
                 <div class="container py-4">
                     <h2 class="text-center font-weight-bold text-uppercase">Страница администратора</h2>
                     <div class="row justify-content-center">
-                        {{-- <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-3">
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-3">
                             <div class="card h-100 shadow">
                                 <a class="card-link text-secondary p-1" href="{{route('admin.products.index')}}">
                                     <h1 class="display-1 text-center"><i class="fas fa-clipboard-list"></i></h1>
@@ -44,7 +44,7 @@
                                     <h4 class="text-center text-uppercase">Характеристики товаров</h4>
                                 </a>
                             </div>
-                        </div> --}}
+                        </div>
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-3">
                             <div class="card h-100 shadow">
                                 <a class="card-link text-secondary p-1" href="{{route('admin.productsCategories.index')}}">
@@ -53,7 +53,7 @@
                                 </a>
                             </div>
                         </div>
-                       {{--  <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-3">
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-3">
                             <div class="card h-100 shadow">
                                 <a class="card-link text-secondary p-1" href="{{route('admin.records.index')}}">
                                     <h1 class="display-1 text-center"><i class="fas fa-newspaper"></i></h1>
@@ -71,25 +71,49 @@
                         </div>
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-3">
                             <div class="card h-100 shadow">
-                                <a class="card-link text-secondary p-1" href="{{route('admin.recordsCategories.index')}}">
-                                    <h1 class="display-1 text-center"><i class="fas fa-list"></i></h1>
-                                    <h4 class="text-center text-uppercase">Категории новостей</h4>
+                                <a class="card-link text-secondary p-1" href="{{route('admin.articles.index')}}">
+                                    <h1 class="display-1 text-center"><i class="far fa-list-alt"></i></h1>
+                                    <h4 class="text-center text-uppercase">Список статтей</h4>
                                 </a>
                             </div>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-3">
                             <div class="card h-100 shadow">
-                                <a class="card-link text-secondary p-1" href="{{route('admin.orders.index')}}">
-                                    <h1 class="display-1 text-center"><i class="fas fa-shipping-fast"></i></h1>
-                                    <h4 class="text-center text-uppercase">Список заказов</h4>
+                                <a class="card-link text-secondary p-1" href="{{route('admin.articles.create')}}">
+                                    <h1 class="display-1 text-center"><i class="fas fa-plus-square"></i></h1>
+                                    <h4 class="text-center text-uppercase">Добавить статью</h4>
                                 </a>
                             </div>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-3">
                             <div class="card h-100 shadow">
-                                <a class="card-link text-secondary p-1" href="{{route('admin.users.index')}}">
-                                    <h1 class="display-1 text-center"><i class="fas fa-users"></i></h1>
-                                    <h4 class="text-center text-uppercase">Список клиентов</h4>
+                                <a class="card-link text-secondary p-1" href="{{route('admin.partners.index')}}">
+                                    <h1 class="display-1 text-center"><i class="far fa-handshake"></i></h1>
+                                    <h4 class="text-center text-uppercase">Список партнеров</h4>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-3">
+                            <div class="card h-100 shadow">
+                                <a class="card-link text-secondary p-1" href="{{route('admin.partners.create')}}">
+                                    <h1 class="display-1 text-center"><i class="fas fa-plus"></i></h1>
+                                    <h4 class="text-center text-uppercase">Добавить партнера</h4>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-3">
+                            <div class="card h-100 shadow">
+                                <a class="card-link text-secondary p-1" href="{{route('admin.services.index')}}">
+                                    <h1 class="display-1 text-center"><i class="fas fa-hand-holding-usd"></i></h1>
+                                    <h4 class="text-center text-uppercase">Список услуг</h4>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-3">
+                            <div class="card h-100 shadow">
+                                <a class="card-link text-secondary p-1" href="{{route('admin.services.create')}}">
+                                    <h1 class="display-1 text-center"><i class="fas fa-plus-circle"></i></h1>
+                                    <h4 class="text-center text-uppercase">Добавить услугу</h4>
                                 </a>
                             </div>
                         </div>
@@ -108,7 +132,31 @@
                                     <h4 class="text-center text-uppercase">Загруженные изображения</h4>
                                 </a>
                             </div>
-                        </div> --}}
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-3">
+                            <div class="card h-100 shadow">
+                                <a class="card-link text-secondary p-1" href="{{route('admin.pages.jobsEdit')}}">
+                                    <h1 class="display-1 text-center"><i class="fas fa-briefcase"></i></h1>
+                                    <h4 class="text-center text-uppercase">Страница вакансии</h4>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-3">
+                            <div class="card h-100 shadow">
+                                <a class="card-link text-secondary p-1" href="{{route('admin.projects.index')}}">
+                                    <h1 class="display-1 text-center"><i class="fas fa-project-diagram"></i></h1>
+                                    <h4 class="text-center text-uppercase">Список проектов</h4>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-3">
+                            <div class="card h-100 shadow">
+                                <a class="card-link text-secondary p-1" href="{{route('admin.projects.create')}}">
+                                    <h1 class="display-1 text-center"><i class="fas fa-folder-plus"></i></h1>
+                                    <h4 class="text-center text-uppercase">Добавить проект</h4>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

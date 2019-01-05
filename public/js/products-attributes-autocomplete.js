@@ -64,14 +64,17 @@ function autocomplete(inp, arr) {
   });
 }
 
-function showSuggestedList(){    
-    var autocompleteListTargetName = document.getElementsByClassName("autocomplete-list-target-name");
-    var autocompleteListTargetValue = document.getElementsByClassName("autocomplete-list-target-value");
+function showSuggestedList(){
+  for (var langKey in languages) {
+    var autocompleteListTargetName = document.getElementsByClassName("autocomplete-list-target-name"+langKey.toUpperCase());
+    var autocompleteListTargetValue = document.getElementsByClassName("autocomplete-list-target-value"+langKey.toUpperCase());
     for(i=0; i<autocompleteListTargetName.length; i++) {
-        autocomplete(autocompleteListTargetName[i], attributesNamesArray);
-        autocomplete(autocompleteListTargetValue[i], attributesValuesArray);
+        autocomplete(autocompleteListTargetName[i], attributesNamesArray.get(langKey.toUpperCase()));
+        autocomplete(autocompleteListTargetValue[i], attributesValuesArray.get(langKey.toUpperCase()));
     }
+  }
 }
+
 document.getElementById("add-new-attribute").addEventListener("click", showSuggestedList);
 (function(){
     showSuggestedList();

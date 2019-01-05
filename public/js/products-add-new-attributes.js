@@ -28,17 +28,17 @@ function addNewAttribute() {
 
     row1.appendChild(p);
     row1.appendChild(deleteButtonDiv);
-
-    var row2 = document.createElement("div");
-    row2.setAttribute('class',"row");
-
-    var divName = document.createElement("div");
-    divName.setAttribute('class',"col-12 col-sm-6 py-2");
+    container.appendChild(row1);
 
     for (var langKey in languages) {
+        var row2 = document.createElement("div");
+        row2.setAttribute('class',"row");
+
+        var divName = document.createElement("div");
+        divName.setAttribute('class',"col-12 col-sm-6 py-2");
 
         var labelName = document.createElement("label");
-        labelName.setAttribute('class',"text-uppercase font-weight-bold col-12 pt-4");
+        labelName.setAttribute('class',"text-uppercase font-weight-bold col-12");
         labelName.setAttribute('for',"attribute_name_"+langKey.toUpperCase()+"_"+attributeIterator);
 
         var labelNameText = document.createTextNode("Название "+langKey.toUpperCase()+":");
@@ -49,20 +49,16 @@ function addNewAttribute() {
         inputName.setAttribute('id',"attribute_name_"+langKey.toUpperCase()+"_"+attributeIterator+" ");
         inputName.setAttribute('name',"attributes_names"+langKey.toUpperCase()+"[]");
         inputName.setAttribute('placeholder',"Название "+langKey.toUpperCase()+":");
-        inputName.setAttribute('class',"form-control autocomplete-list-target-name");
+        inputName.setAttribute('class',"form-control autocomplete-list-target-name"+langKey.toUpperCase());
 
         divName.appendChild(labelName);
         divName.appendChild(inputName);
 
-    }
-
-    var divValue = document.createElement("div");
-    divValue.setAttribute('class',"col-12 col-sm-6 py-2");
-
-    for (var langKey in languages) {
+        var divValue = document.createElement("div");
+        divValue.setAttribute('class',"col-12 col-sm-6 py-2");
 
         var labelValue = document.createElement("label");
-        labelValue.setAttribute('class',"text-uppercase font-weight-bold col-12 pt-4");
+        labelValue.setAttribute('class',"text-uppercase font-weight-bold col-12");
         labelValue.setAttribute('for',"attribute_value_"+langKey.toUpperCase()+"_"+attributeIterator);
 
         var labelValueText = document.createTextNode("Значение "+langKey.toUpperCase()+":");
@@ -73,19 +69,17 @@ function addNewAttribute() {
         inputValue.setAttribute('id',"attribute_value_"+langKey.toUpperCase()+"_"+attributeIterator);
         inputValue.setAttribute('name',"attributes_values"+langKey.toUpperCase()+"[]");
         inputValue.setAttribute('placeholder',"Значение "+langKey.toUpperCase());
-        inputValue.setAttribute('class',"form-control autocomplete-list-target-value");
+        inputValue.setAttribute('class',"form-control autocomplete-list-target-value"+langKey.toUpperCase());
 
         divValue.appendChild(labelValue);
         divValue.appendChild(inputValue);
 
+        row2.appendChild(divName);
+        row2.appendChild(divValue);
+
+        container.appendChild(row2);
     }
 
-    row2.appendChild(divName);
-    row2.appendChild(divValue);
-
-    container.appendChild(row1);
-    container.appendChild(row2);
-    
     document.getElementById('productAttributes').appendChild(container);
 }
 

@@ -8,7 +8,7 @@ class ProductsCategory extends Model
 {
     public function products()
     {
-        return $this->hasMany('App\Product');
+        return $this->hasMany('App\Product','category_id','id');
     }
     public function childs() 
     {

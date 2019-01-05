@@ -17,7 +17,7 @@
                     @if(count($products))
                         <div class="row justify-content-center">
                             @foreach($products as $product)
-                                <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-3">
+                                <div class="col-12 col-sm-6 col-md-4 my-3">
                                     <div class="card h-100 shadow p-2">
                                         <a class="card-link text-secondary p-1" href="{{route('admin.products.edit', $product->id)}}">
                                             <div class="text-center"><img class="img-fluid img-thumbnail" src="{{$product->main_photo ? asset($product->main_photo) : asset('img/common/default.png')}}" alt="{{ $product->titleRU }}"></div>

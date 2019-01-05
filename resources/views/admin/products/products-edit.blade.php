@@ -15,15 +15,32 @@
                 @endif
                 <div class="py-4 bg-white border rounded border-light shadow">
                     {!! Form::open(['route'=> ['admin.products.update', $product->id], 'autocomplete' => 'off', 'method' => 'put', 'files' => true]) !!}
+                        {!! Form::hidden('redirectURL', URL::previous()) !!}
                         <h2 class="text-center font-weight-bold text-uppercase pb-5">Редактировать {{ $product->titleRU }}</h2>
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-12 col-md-6">
-                                    <img class="img-thumbnail img-fluid" src="{{$product->main_photo ? asset($product->main_photo) : asset('img/common/default.png')}}" alt="{{ $product->title }}">
+                                    <img class="img-thumbnail img-fluid" src="{{$product->main_photo ? asset($product->main_photo) : asset('img/common/default.png')}}" alt="{{ $product->titleRU }}">
                                     <div class="form-group">
                                         {!! Form::label('main_photo', 'Вибрать главное фото товара:', ['class' => 'text-uppercase font-weight-bold']) !!}
                                         {!! Form::file('main_photo', ($errors->has('main_photo') ? ['class'=>'form-control is-invalid'] : ['class'=>'form-control'])) !!}
                                         <span class="text-danger">{{ $errors->first('main_photo') }}</span>
+                                    </div>
+                                    @isset($product->main_video)
+                                        <video style="width: 100%;" controls>
+                                            <source src="{{asset($product->main_video)}}" type="video/{{pathinfo($product->main_video, PATHINFO_EXTENSION)}}">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    @endisset
+                                    <div class="form-group">
+                                        {!! Form::label('main_video', 'Вибрать видео товара:', ['class' => 'text-uppercase font-weight-bold']) !!}
+                                        {!! Form::file('main_video', ($errors->has('main_video') ? ['class'=>'form-control is-invalid'] : ['class'=>'form-control'])) !!}
+                                        <span class="text-danger">{{ $errors->first('main_video') }}</span>
+                                    </div>
+                                    <div class="form-group">
+                                        {!! Form::label('youtube', 'Youtube идентификатор:', ['class' => 'text-uppercase font-weight-bold']) !!}
+                                        {!! Form::text('youtube', $product->youtube, ['placeholder'=>'Youtube идентификатор'] + ($errors->has('youtube') ? ['class'=>'form-control is-invalid'] : ['class'=>'form-control'])) !!}
+                                        <span class="text-danger">{{ $errors->first('youtube') }}</span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
@@ -97,20 +114,20 @@
                                                     <div class="row">
                                                         <div class="col-12 col-sm-6 py-2">
                                                             <label class="text-uppercase font-weight-bold col-12" for="attribute_name_{{strtoupper($code)}}_{{$i+1}}">Название {{strtoupper($code)}}:</label>
-                                                            <input type="text" id="attribute_name_{{strtoupper($code)}}_{{$i+1}}" name="attributes_names_{{strtoupper($code)}}[]" placeholder="Название {{strtoupper($code)}}" 
-                                                            @if($errors->has('attributes_names_'.strtoupper($code).'_'.$i)) class="form-control autocomplete-list-target-name is-invalid" 
-                                                            @else class="form-control autocomplete-list-target-name"
+                                                            <input type="text" id="attribute_name_{{strtoupper($code)}}_{{$i+1}}" name="attributes_names{{strtoupper($code)}}[]" placeholder="Название {{strtoupper($code)}}" 
+                                                            @if($errors->has('attributes_names_'.strtoupper($code).'_'.$i)) class="form-control autocomplete-list-target-name{{strtoupper($code)}} is-invalid" 
+                                                            @else class="form-control autocomplete-list-target-name{{strtoupper($code)}}"
                                                             @endif 
-                                                            value="{{$attributesNamesOrderedArray[$i]->{'name'.strtoupper($code)} }}">
+                                                            value="{{old('attributes_names'.strtoupper($code).'.'.$i) ?: $attributesNamesOrderedArray[$i]->{'name'.strtoupper($code)} }}">
                                                             <span class="text-danger">{{ $errors->first('attributes_names_'.strtoupper($code).'_'.$i) }}</span>
                                                         </div>
                                                         <div class="col-12 col-sm-6 py-2">
                                                             <label class="text-uppercase font-weight-bold col-12" for="attribute_value_{{strtoupper($code)}}_{{$i+1}}">Значение {{strtoupper($code)}}:</label>
-                                                            <input type="text" id="attribute_value_{{strtoupper($code)}}_{{$i+1}}" name="attributes_values_{{strtoupper($code)}}[]" placeholder="Значение {{strtoupper($code)}}" 
-                                                            @if($errors->has('attributes_values_'.strtoupper($code).'_'.$i)) class="form-control autocomplete-list-target-value is-invalid"
-                                                            @else class="form-control autocomplete-list-target-value"
+                                                            <input type="text" id="attribute_value_{{strtoupper($code)}}_{{$i+1}}" name="attributes_values{{strtoupper($code)}}[]" placeholder="Значение {{strtoupper($code)}}" 
+                                                            @if($errors->has('attributes_values_'.strtoupper($code).'_'.$i)) class="form-control autocomplete-list-target-value{{strtoupper($code)}} is-invalid"
+                                                            @else class="form-control autocomplete-list-target-value{{strtoupper($code)}}"
                                                             @endif
-                                                            value="{{$attributesNamesOrderedArray[$i]->values()->whereHas('products', function($query)use($product){$query->where('product_id', '=', $product->id);})->get()[$k]->{'value'.strtoupper($code)} }}">
+                                                            value="{{old('attributes_values'.strtoupper($code).'.'.$i) ?: $attributesNamesOrderedArray[$i]->values()->whereHas('products', function($query)use($product){$query->where('product_id', '=', $product->id);})->get()[$k]->{'value'.strtoupper($code)} }}">
                                                             <span class="text-danger">{{ $errors->first('attributes_values_'.strtoupper($code).'_'.$i) }}</span>
                                                         </div>
                                                     </div>
@@ -118,8 +135,8 @@
                                             </div>                                            
                                         @endfor
                                     @endif
-                                    @if(!empty(old('attributes_names')))
-                                        @for($i; $i < count(old('attributes_names')); $i++)
+                                    @if(!empty(old('attributes_namesRU')))
+                                        @for($i; $i < count(old('attributes_namesRU')); $i++)
                                             <div class="existed-attributes form-group py-4 border-bottom" id="attribute{{$i+1}}">
                                                 <div class="row">
                                                     <p class="text-uppercase font-weight-bold col-12 col-sm-6">Характеристика {{$i+1}}</p>
@@ -131,21 +148,21 @@
                                                     <div class="row">
                                                         <div class="col-12 col-sm-6 py-2">
                                                             <label class="text-uppercase font-weight-bold col-12" for="attribute_name_{{strtoupper($code)}}_{{$i+1}}">Название {{strtoupper($code)}}:</label>
-                                                            <input type="text" id="attribute_name_{{strtoupper($code)}}_{{$i+1}}" name="attributes_names[]" placeholder="Название {{strtoupper($code)}}" 
-                                                            @if($errors->has('attributes_names_'.strtoupper($code).'_'.$i)) class="form-control autocomplete-list-target-name is-invalid" 
-                                                            @else class="form-control autocomplete-list-target-name"
+                                                            <input type="text" id="attribute_name_{{strtoupper($code)}}_{{$i+1}}" name="attributes_names{{strtoupper($code)}}[]" placeholder="Название {{strtoupper($code)}}" 
+                                                            @if($errors->has('attributes_names'.strtoupper($code).'.'.$i)) class="form-control autocomplete-list-target-name{{strtoupper($code)}} is-invalid" 
+                                                            @else class="form-control autocomplete-list-target-name{{strtoupper($code)}}"
                                                             @endif 
-                                                            value="{{old('attributes_names_'.strtoupper($code).'_'.$i)}}">
-                                                            <span class="text-danger">{{ $errors->first('attributes_names_'.strtoupper($code).'_'.$i) }}</span>
+                                                            value="{{old('attributes_names'.strtoupper($code).'.'.$i)}}">
+                                                            <span class="text-danger">{{ $errors->first('attributes_names'.strtoupper($code).'.'.$i) }}</span>
                                                         </div>
                                                         <div class="col-12 col-sm-6 py-2">
                                                             <label class="text-uppercase font-weight-bold col-12" for="attribute_value_{{strtoupper($code)}}_{{$i+1}}">Значение {{strtoupper($code)}}:</label>
-                                                            <input type="text" id="attribute_value_{{strtoupper($code)}}_{{$i+1}}" name="attributes_values[]" placeholder="Значение {{strtoupper($code)}}" 
-                                                            @if($errors->has('attributes_values_'.strtoupper($code).'_'.$i)) class="form-control autocomplete-list-target-value is-invalid"
-                                                            @else class="form-control autocomplete-list-target-value"
+                                                            <input type="text" id="attribute_value_{{strtoupper($code)}}_{{$i+1}}" name="attributes_values{{strtoupper($code)}}[]" placeholder="Значение {{strtoupper($code)}}" 
+                                                            @if($errors->has('attributes_values'.strtoupper($code).'.'.$i)) class="form-control autocomplete-list-target-value{{strtoupper($code)}} is-invalid"
+                                                            @else class="form-control autocomplete-list-target-value{{strtoupper($code)}}"
                                                             @endif
-                                                            value="{{old('attributes_values_'.strtoupper($code).'_'.$i)}}">
-                                                            <span class="text-danger">{{ $errors->first('attributes_values_'.strtoupper($code).'_'.$i) }}</span>
+                                                            value="{{old('attributes_values'.strtoupper($code).'.'.$i)}}">
+                                                            <span class="text-danger">{{ $errors->first('attributes_values'.strtoupper($code).'.'.$i) }}</span>
                                                         </div>
                                                     </div>
                                                 @endforeach
@@ -156,11 +173,13 @@
 
                             </div>
                             <button id="add-new-attribute" type="button" class="btn btn-primary w-100 my-4 text-uppercase font-weight-bold" onclick="addNewAttribute()">Добавить характеристику товара</button>
-                            <div class="form-group">
-                                {!! Form::label('description', 'Основная часть:', ['class' => 'text-uppercase font-weight-bold']) !!}
-                                {!! Form::textarea('description', $product->description, ['id'=>'editor'] + ($errors->has('description') ? ['class'=>'form-control is-invalid'] : ['class'=>'form-control'])) !!}
-                                <span class="text-danger">{{ $errors->first('description') }}</span>
-                            </div>
+                            @foreach(LaravelLocalization::getLocalesOrder() as $code => $locale)
+                                <div class="form-group">
+                                    {!! Form::label('description'.strtoupper($code), 'Основная часть '.strtoupper($code).':', ['class' => 'text-uppercase font-weight-bold']) !!}
+                                    {!! Form::textarea('description'.strtoupper($code), $product->{'description'.strtoupper($code)}, ($errors->has('description'.strtoupper($code)) ? ['class'=>'form-control is-invalid editor'] : ['class'=>'form-control editor'])) !!}
+                                    <span class="text-danger">{{ $errors->first('description'.strtoupper($code)) }}</span>
+                                </div>
+                            @endforeach
                         </div>
                         <div class="col-md-6 m-auto">
                             {!! Form::submit('Сохранить', ['class'=>'btn btn-success w-100 text-uppercase font-weight-bold']) !!}
@@ -171,20 +190,29 @@
                             {!! Form::submit('Удалить', ['class'=>'btn btn-danger w-100 text-uppercase font-weight-bold']) !!}
                         </div>
                     {!! Form::close() !!}
+                    <div class="mt-3">
+                        <div class="col-md-6 m-auto">
+                            <a class="btn btn-warning w-100 text-uppercase font-weight-bold" href="{{route('admin.products.copy', [$product->id, Crypt::encrypt(URL::previous())])}}">Копировать</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </main>
 <script>
-    var attributesNamesArray = {!! json_encode($attributesNamesArray) !!};
-    var attributesValuesArray = {!! json_encode($attributesValuesArray) !!};
+    var attributesNamesArray = new Map();
+    var attributesValuesArray = new Map();  
+    @foreach(LaravelLocalization::getLocalesOrder() as $code => $locale)
+        attributesNamesArray.set("{{strtoupper($code)}}",{!! json_encode($attributesNamesArray[strtoupper($code)]) !!});
+        attributesValuesArray.set("{{strtoupper($code)}}",{!! json_encode($attributesValuesArray[strtoupper($code)]) !!});
+    @endforeach
     var languages = {!! json_encode(LaravelLocalization::getLocalesOrder()) !!}
 </script>
 <script src="{{ asset('js/products-attributes-autocomplete.js') }}"></script>
 <script src="{{ asset('js/products-add-new-attributes.js') }}"></script>
 <script src="/vendor/unisharp/laravel-ckeditor/ckeditor.js"></script>
 <script>
-    CKEDITOR.replace( 'editor' );
+    CKEDITOR.replaceClass = 'editor';
 </script>
 @endsection

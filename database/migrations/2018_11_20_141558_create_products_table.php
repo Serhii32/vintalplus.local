@@ -19,6 +19,8 @@ class CreateProductsTable extends Migration
             $table->integer('priority')->default(0);
             $table->decimal('price', 10, 2)->nullable();
             $table->string('main_photo')->nullable();
+            $table->string('main_video')->nullable();
+            $table->string('youtube')->nullable();
             foreach(LaravelLocalization::getLocalesOrder() as $code => $locale)
             {
                 $table->string('title'.strtoupper($code));

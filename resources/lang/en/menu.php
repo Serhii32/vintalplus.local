@@ -10,5 +10,6 @@ return [
     'articles' => 'articles',
     'projects' => 'projects',
     'jobs' => 'jobs',
-
+    'catalog' => 'catalog',
+    'news' => 'news',
 ];

@@ -14,7 +14,7 @@ class ProductsCategoriesController extends Controller
 {
     public function index()
     {
-        $parentCategories = ProductsCategory::where('parent_id', '=', 0)->orderBy('priority', 'ASC')->orderBy('id')->get();
+        $parentCategories = ProductsCategory::where('parent_id', '=', 0)->orderBy('priority', 'desc')->orderBy('id', 'asc')->get();
         $allCategories = ProductsCategory::pluck('titleRU','id')->all();
         $pageTitle = 'Категории товаров';
         return view('admin.products-categories.categories-index', compact('parentCategories','allCategories', 'pageTitle'));

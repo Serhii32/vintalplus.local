@@ -6,9 +6,13 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>KEK</title>
-
+    <title>{{ isset($pageTitle) ? $pageTitle : 'NVPModul' }}</title>
+    <meta name="description" content="{{ isset($pageDescription) ? $pageDescription : 'Продукция для перемещения грузов' }}"/>
     <meta name="author" content="serhii.bondarenko.ria@gmail.com">
+    <meta name="keywords" content="{{ isset($pageKeywords) ? $pageKeywords : 'Продукция для перемещения грузов' }}">
+    <link rel="canonical" href="{{ URL::current() }}"/>
+
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
     <script src="{{ asset('js/app.js') }}" defer></script>
 
@@ -16,14 +20,24 @@
 
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131420268-1"></script>
+	<script>
+	   window.dataLayer = window.dataLayer || [];
+	   function gtag(){dataLayer.push(arguments);}
+	   gtag('js', new Date());
+
+	   gtag('config', 'UA-131420268-1');
+	</script>
+
 </head>
 <body>
 	<header style="background: #ccc;">
+		@auth <a href="{{route('login')}}" class="btn btn-warning font-weight-bold text-uppercase position-fixed" style="z-index: 100; bottom: 0; right: 0;"><h3>Админка</h3></a> @endauth
 		<div class="container">
-
 			<div class="row">
 				<div class="col-12 col-md-4 m-auto text-center">
-					<a href="{{route('page.index')}}"><img style="width: 90%; max-width: 220px;" src="{{ asset('img/Hypno_large.gif') }}"></a>
+					<a href="{{route('page.index')}}"><img style="width: 90%; max-width: 220px;" src="{{ asset('img/common/logo.png') }}"></a>
 					<nav class="navbar navbar-expand navbar-light p-0">
 						<ul class="navbar-nav m-auto">
 							@foreach(LaravelLocalization::getLocalesOrder() as $code => $locale)
@@ -33,35 +47,52 @@
 			                @endforeach
 		            	</ul>
 		            </nav>
+
+		            <div id="myPopup" class="popuptext">
+					    {!! Form::open(['route' => 'page.search', 'method'=>'get', 'class' => 'form-inline p-3 input-group-btn search-panel row']) !!}
+							{!! Form::text('searchPhrase', old('searchPhrase'), ['placeholder' => __('pages.search')] + ($errors->has('searchPhrase') ? ['class'=>'form-control col-12 col-sm-11 col-md-10 rounded-0 is-invalid'] : ['class'=>'form-control col-12 col-sm-11 col-md-10 rounded-0'])) !!}
+							{!! Form::button('<i class="fa fa-search"></i>', ['type' => 'submit', 'class' => 'btn col-12 col-sm-1 col-md-2 rounded-0', 'style' => 'background: #5cb85c']) !!}
+							<span class="text-danger">{{ $errors->first('searchPhrase') }}</span>
+						{!! Form::close() !!}
+					</div>
+
 				</div>
 				<div class="col-12 col-md-8 m-auto p-0">
 
-					<div id="header-slider" class="carousel slide" data-ride="carousel" data-interval="3000">
+					<div id="header-slider" class="carousel slide" data-ride="carousel" data-interval="3000" style="max-width: 550px; margin: auto;">
 					  	<ul class="carousel-indicators">
 						    <li data-target="#header-slider" data-slide-to="0" class="active"></li>
 						    <li data-target="#header-slider" data-slide-to="1"></li>
 						    <li data-target="#header-slider" data-slide-to="2"></li>
+						    <li data-target="#header-slider" data-slide-to="3"></li>
 					  	</ul>
 					  	<div class="carousel-inner">
 						    <div class="carousel-item active">
-						      	<img style="width: 100%" src="https://www.w3schools.com/bootstrap4/la.jpg" alt="Los Angeles" height="250">
+						      	<img src="{{ asset('img/common/slider/slide1.jpg') }}" alt="NVPModul" height="250">
 						      	<div class="carousel-caption">
-						        	<h3>Los Angeles</h3>
-						        	<p>We had such a great time in LA!</p>
+						        	<h3></h3>
+						        	<p></p>
 						      	</div>   
 						    </div>
 						    <div class="carousel-item">
-						      	<img style="width: 100%" src="https://www.w3schools.com/bootstrap4/chicago.jpg" alt="Chicago" height="250">
+						      	<img src="{{ asset('img/common/slider/slide2.jpg') }}" alt="NVPModul" height="250">
 						      	<div class="carousel-caption">
-						        	<h3>Chicago</h3>
-						        	<p>Thank you, Chicago!</p>
+						        	<h3></h3>
+						        	<p></p>
 						      	</div>   
 						    </div>
 						    <div class="carousel-item">
-						      	<img style="width: 100%" src="https://www.w3schools.com/bootstrap4/ny.jpg" alt="New York" height="250">
+						      	<img src="{{ asset('img/common/slider/slide3.jpg') }}" alt="NVPModul" height="250">
 						      	<div class="carousel-caption">
-						        	<h3>New York</h3>
-						        	<p>We love the Big Apple!</p>
+						        	<h3></h3>
+						        	<p></p>
+						      	</div>   
+						    </div>
+						    <div class="carousel-item">
+						      	<img src="{{ asset('img/common/slider/slide4.jpg') }}" alt="NVPModul" height="250">
+						      	<div class="carousel-caption">
+						        	<h3></h3>
+						        	<p></p>
 						      	</div>   
 						    </div>
 					  	</div>
@@ -72,8 +103,6 @@
 					    	<span class="carousel-control-next-icon"></span>
 					  	</a>
 					</div>
-
-
 				</div>
 			</div>
 
@@ -105,11 +134,17 @@
 				      	<li class="nav-item main-menu-item py-2" @isset($articlesActive)style="background: #5cb85c;"@endisset>
 				        	<a class="nav-link font-weight-bold text-uppercase text-white" href="{{route('page.articles')}}">{{ __('menu.articles') }}</a>
 				      	</li>
+				      	<li class="nav-item main-menu-item py-2" @isset($newsActive)style="background: #5cb85c;"@endisset>
+				        	<a class="nav-link font-weight-bold text-uppercase text-white" href="{{route('page.records')}}">{{ __('menu.news') }}</a>
+				      	</li>
 				      	<li class="nav-item main-menu-item py-2" @isset($projectsActive)style="background: #5cb85c;"@endisset>
 				        	<a class="nav-link font-weight-bold text-uppercase text-white" href="{{route('page.projects')}}">{{ __('menu.projects') }}</a>
 				      	</li>
 				      	<li class="nav-item main-menu-item py-2" @isset($jobsActive)style="background: #5cb85c;"@endisset>
 				        	<a class="nav-link font-weight-bold text-uppercase text-white" href="{{route('page.jobs')}}">{{ __('menu.jobs') }}</a>
+				      	</li>
+				      	<li class="nav-item main-menu-item py-2" @isset($catalogActive)style="background: #5cb85c;"@endisset>
+				        	<a class="nav-link font-weight-bold text-uppercase text-white" href="{{route('page.catalog')}}">{{ __('menu.catalog') }}</a>
 				      	</li>
 				    </ul>
 			  	</div>
@@ -119,26 +154,25 @@
 	<main style="background: #fff">
 		@yield('content')
 	</main>
-
-
 	<footer style="background: #ccc;">
 		<div class="container">
 			<div class="row py-4">
 				<div class="col-12 col-md-3 m-auto text-center">
-					<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2605.5072115215075!2d28.49863641568756!3d49.22887207932548!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x472d5b110e77db9b%3A0xdd996bb236af22aa!2z0LLRg9C70LjRhtGPINCf0YDQuNCy0L7QutC30LDQu9GM0L3QsCwgNDAsINCS0ZbQvdC90LjRhtGPLCDQktGW0L3QvdC40YbRjNC60LAg0L7QsdC70LDRgdGC0YwsIDIxMDAw!5e0!3m2!1suk!2sua!4v1542635381304" frameborder="0" style="border:0; width: 100%" allowfullscreen></iframe>
+					<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d921.1907667998453!2d28.5008404092301!3d49.22861153197919!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x472d5b11049c172d%3A0x5c92c6268739f3ea!2sPryvokzal&#39;na+St%2C+38%2C+Vinnytsia%2C+Vinnyts&#39;ka+oblast%2C+21000!5e0!3m2!1sen!2sua!4v1545484891820" frameborder="0" style="border:0; width: 100%" allowfullscreen></iframe>
 				</div>
 				<div class="col-12 col-md-3 m-auto">
-					<h5><span class="font-weight-bold text-uppercase">Адрес:</span><br>21001, г. Винница, ул. Привокзальная 40а<br><br><span class="font-weight-bold text-uppercase">Email:</span><br>vintalplus@gmail.com</h5>
+					<h5><span class="font-weight-bold text-uppercase">{{ __('pages.address') }}:</span><br>21001, {{ __('pages.addressLine') }}<br><br><span class="font-weight-bold text-uppercase">Email:</span><br>nvp.modul@gmail.com</h5>
 				</div>
 				<div class="col-12 col-md-3 m-auto">
-					<h5><span class="font-weight-bold text-uppercase">Тел/факс:</span><br>(0432) 61-05-15<br>(050) 447-66-46<br>(067) 975-65-30<br>(067) 975-65-05</h5>
+					<h5><span class="font-weight-bold text-uppercase">{{ __('pages.telFax') }}:</span><br>(0432) 61-05-15<br>(050) 447-66-46<br>(067) 975-65-30 <i class="fab fa-viber"></i><br>(067) 975-65-05</h5>
 				</div>
 				<div class="col-12 col-md-3 m-auto">
-					<h5><span class="font-weight-bold text-uppercase">График:</span><br>Пн-Пт: 8.00-17.00<br>Сб-Вс: выходные</h5>
+					<h5><span class="font-weight-bold text-uppercase">{{ __('pages.schedule') }}:</span><br>{{ __('pages.monFri') }}: 8.00-17.00<br>{{ __('pages.satSun') }}: {{ __('pages.dayOff') }}</h5>
+					<h5><a style="color:#4267b2; font-size: 40px;" href="https://www.facebook.com" target="_blanc"><i class="fab fa-facebook"></i></a> &nbsp;&nbsp;&nbsp;&nbsp; <a style="color:#7c529e; font-size: 40px;" href="viber://add?number=+380679756530"><i class="fab fa-viber"></i></a></h5>
 				</div>
 			</div>
-			<h5 class="font-weight-bold text-uppercase text-center">
-				vintalplus © 2013-{{\Carbon\Carbon::now()->year}}  
+			<h5 class="font-weight-bold text-uppercase text-center mb-0">
+				nvpmodul © 2013-{{\Carbon\Carbon::now()->year}}  
 			</h5>
 		</div>
 	</footer>

@@ -18,7 +18,7 @@ class CreateProductsAttributesValuesTable extends Migration
             $table->increments('id');
             foreach(LaravelLocalization::getLocalesOrder() as $code => $locale)
             {
-                $table->string('value'.strtoupper($code))->unique();
+                $table->string('value'.strtoupper($code));
             }
             $table->timestamps();
         });

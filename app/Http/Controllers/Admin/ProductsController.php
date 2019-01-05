@@ -10,33 +10,47 @@ use App\ProductsAttributesName;
 use App\ProductsAttributesValue;
 use App\Http\Requests\StoreProductRequest;
 use Illuminate\Support\Facades\Storage;
-// use Illuminate\Support\Facades\DB;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
 
 class ProductsController extends Controller
 {
-	private $attributesNamesArray;
-	private $attributesValuesArray;
+    private $attributesNamesArray;
+    private $attributesValuesArray;
 
 	public function __construct()
 	{
-		$attributesNames = ProductsAttributesName::all();
-        $attributesNamesOnlyNamesCollection = $attributesNames->map(function ($attributesName) {
-		    return $attributesName->only(['name']);
-		});
-		for($i=0; $i < count($attributesNamesOnlyNamesCollection); $i++) {
-			$this->attributesNamesArray[$i] = $attributesNamesOnlyNamesCollection[$i]['name'];
-		}
-		$attributesValues = ProductsAttributesValue::all();
-        $attributesValuesOnlyValuesCollection = $attributesValues->map(function ($attributesValue) {
-		    return $attributesValue->only(['value']);
-		});
-		for($i=0; $i < count($attributesValuesOnlyValuesCollection); $i++) {
-			$this->attributesValuesArray[$i] = $attributesValuesOnlyValuesCollection[$i]['value'];
-		}
+        foreach(LaravelLocalization::getLocalesOrder() as $code => $locale)
+        {
+           ${'attributesNamesArray'.strtoupper($code)} = [];
+           ${'attributesValuesArray'.strtoupper($code)} = [];
+        }
+
+        foreach(LaravelLocalization::getLocalesOrder() as $code => $locale)
+        {
+            $attributesNames = ProductsAttributesName::all();
+            $attributesNamesOnlyNamesCollection = $attributesNames->map(function ($attributesName) use ($code) {
+                return $attributesName->only(['name'.strtoupper($code)]);
+            });
+
+            for($i=0; $i < count($attributesNamesOnlyNamesCollection); $i++) {
+                ${'attributesNamesArray'.strtoupper($code)}[$i] = $attributesNamesOnlyNamesCollection[$i]['name'.strtoupper($code)];
+            }
+            $attributesValues = ProductsAttributesValue::all();
+            $attributesValuesOnlyValuesCollection = $attributesValues->map(function ($attributesValue) use ($code) {
+                return $attributesValue->only(['value'.strtoupper($code)]);
+            });
+            for($i=0; $i < count($attributesValuesOnlyValuesCollection); $i++) {
+                ${'attributesValuesArray'.strtoupper($code)}[$i] = $attributesValuesOnlyValuesCollection[$i]['value'.strtoupper($code)];
+            }
+            $this->attributesNamesArray[strtoupper($code)] = ${'attributesNamesArray'.strtoupper($code)};
+            $this->attributesValuesArray[strtoupper($code)] = ${'attributesValuesArray'.strtoupper($code)};
+        }
 	}
 
     public function index()
-    {
+    { 
         $products = Product::paginate(12);
         $pageTitle = 'Список товаров';
         return view('admin.products.products-index', compact(['products', 'pageTitle']));
@@ -51,58 +65,80 @@ class ProductsController extends Controller
     
     public function store(StoreProductRequest $request)
     {
-    	dd($request);
         $product = new Product();
         foreach(LaravelLocalization::getLocalesOrder() as $code => $locale)
         {
         	$product->{'title'.strtoupper($code)} = $request->{'title'.strtoupper($code)};
-        	$product->description = $request->description;
-        	$product->short_description = $request->short_description;
-        	$product->titleSEO = $request->titleSEO;
-	        $product->descriptionSEO = $request->descriptionSEO;
-    	    $product->keywordsSEO = $request->keywordsSEO;
+        	$product->{'description'.strtoupper($code)} = $request->{'description'.strtoupper($code)};
+        	$product->{'short_description'.strtoupper($code)} = $request->{'short_description'.strtoupper($code)};
+        	$product->{'titleSEO'.strtoupper($code)} = $request->{'titleSEO'.strtoupper($code)};
+	        $product->{'descriptionSEO'.strtoupper($code)} = $request->{'descriptionSEO'.strtoupper($code)};
+    	    $product->{'keywordsSEO'.strtoupper($code)} = $request->{'keywordsSEO'.strtoupper($code)};
         }
         $product->price = $request->price;
-        $product->priority = $request->priority;
+        $product->priority = $request->priority ?: 0;
         $product->category_id = $request->category;
-        
+        $product->youtube = $request->youtube;
         $product->save();
         $last_insereted_id = $product->id;
         if ($request->main_photo != null) {
             $product->main_photo = $request->main_photo->store('img/common/products/' . $last_insereted_id, ['disk' => 'uploaded_img']);
             $product->save();
         }
-        if ($request->attributes_names != null && $request->attributes_values != null) {
-            for($i = 0; $i < count($request->attributes_names); $i++) {
+        if ($request->main_video != null) {
+            $product->main_video = $request->main_video->store('video/common/products/' . $last_insereted_id, ['disk' => 'uploaded_img']);
+            $product->save();
+        }
+        if (isset($request->attributes_namesRU) && $request->all()['attributes_namesRU'] != null && $request->all()['attributes_valuesRU'] != null) {
+            for($i = 0; $i < count($request->all()['attributes_namesRU']); $i++) {
             	$productsAttributesNames = ProductsAttributesName::all();
             	$productsAttributesValues = ProductsAttributesValue::all();
             	$productAttributesNameExist = 0;
             	$productAttributesValueExist = 0;
-            	foreach($productsAttributesNames as $productsAttributesName) {
-            		if($request->attributes_names[$i] == $productsAttributesName->name) {
-            			$productAttributesNameExist = $productsAttributesName->id;
-            			break;
-            		}
-            	}
-            	foreach($productsAttributesValues as $productsAttributesValue) {
-            		if($request->attributes_values[$i] == $productsAttributesValue->value) {
-            			$productAttributesValueExist = $productsAttributesValue->id;
-            			break;
-            		}
-            	}
 
+                $counterN = 0;
+                $counterV = 0;
+                foreach(LaravelLocalization::getLocalesOrder() as $code => $locale) {
+                	foreach($productsAttributesNames as $productsAttributesName) {
+                		if($request->all()['attributes_names'.strtoupper($code)][$i] == $productsAttributesName->{'name'.strtoupper($code)}) {
+                			$productAttributesNameExist = $productsAttributesName->id;
+                            $counterN++;
+                			// break;
+                		}
+                	}
+                    foreach($productsAttributesValues as $productsAttributesValue) {
+                        if($request->all()['attributes_values'.strtoupper($code)][$i] == $productsAttributesValue->{'value'.strtoupper($code)}) {
+                            $productAttributesValueExist = $productsAttributesValue->id;
+                            $counterV++;
+                            // break;
+                        }
+                    }
+                }
+                if($counterN != count(LaravelLocalization::getLocalesOrder())) {
+                    $productAttributesNameExist = 0;
+                }
+                if($counterV != count(LaravelLocalization::getLocalesOrder())) {
+                    $productAttributesValueExist = 0;
+                }
+            	
             	if ($productAttributesNameExist) {
             		$productsAttributesNameNew = ProductsAttributesName::find($productAttributesNameExist);
             	} else {
             		$productsAttributesNameNew = new ProductsAttributesName();
-	            	$productsAttributesNameNew->name = $request->attributes_names[$i];
+            		foreach(LaravelLocalization::getLocalesOrder() as $code => $locale)
+            		{
+            			$productsAttributesNameNew->{'name'.strtoupper($code)} = $request->all()['attributes_names'.strtoupper($code)][$i];
+            		}
 	            	$productsAttributesNameNew->save();
             	}
             	if ($productAttributesValueExist) {
             		$productsAttributesValueNew = ProductsAttributesValue::find($productAttributesValueExist);
             	} else {
             		$productsAttributesValueNew = new ProductsAttributesValue();
-	            	$productsAttributesValueNew->value = $request->attributes_values[$i];
+            		foreach(LaravelLocalization::getLocalesOrder() as $code => $locale)
+            		{
+            			$productsAttributesValueNew->{'value'.strtoupper($code)} = $request->all()['attributes_values'.strtoupper($code)][$i];
+            		}
 	            	$productsAttributesValueNew->save();
             	}
 
@@ -120,7 +156,8 @@ class ProductsController extends Controller
             	$productsAttributesValueNew->names()->attach($productsAttributesNameNew->id);
             }
         }
-        return redirect()->route('admin.products.index')->with(['message' => 'Товар успешно добавлен']);
+        
+        return redirect()->to($request->redirectURL)->with(['message' => 'Товар успешно добавлен']);
     }
     
     public function edit(int $id)
@@ -130,88 +167,128 @@ class ProductsController extends Controller
         $pageTitle = 'Редактировать ' . $product->titleRU;
         return view('admin.products.products-edit', compact(['product', 'categories', 'pageTitle']), ['attributesNamesArray' => $this->attributesNamesArray, 'attributesValuesArray' => $this->attributesValuesArray]);
     }
+
+    public function copy(int $id, string $url)
+    {
+        $categories = ProductsCategory::pluck('titleRU','id')->all();
+        $product = Product::findOrFail($id);
+        $redirectURL = Crypt::decrypt($url);
+        $product->main_photo = null;
+        $product->main_video = null;
+        $product->priority = null;
+        $product->created_at = null;
+        $product->updated_at = null;
+        $pageTitle = 'Добавить товар';
+        return view('admin.products.products-copy', compact(['product', 'categories', 'pageTitle', 'redirectURL']), ['attributesNamesArray' => $this->attributesNamesArray, 'attributesValuesArray' => $this->attributesValuesArray]);
+    }
     
     public function update(StoreProductRequest $request, int $id)
     {
     	$product = Product::findOrFail($id);
-        $product->title = $request->title;
+        foreach(LaravelLocalization::getLocalesOrder() as $code => $locale)
+        {
+            $product->{'title'.strtoupper($code)} = $request->{'title'.strtoupper($code)};
+            $product->{'description'.strtoupper($code)} = $request->{'description'.strtoupper($code)};
+            $product->{'short_description'.strtoupper($code)} = $request->{'short_description'.strtoupper($code)};
+            $product->{'titleSEO'.strtoupper($code)} = $request->{'titleSEO'.strtoupper($code)};
+            $product->{'descriptionSEO'.strtoupper($code)} = $request->{'descriptionSEO'.strtoupper($code)};
+            $product->{'keywordsSEO'.strtoupper($code)} = $request->{'keywordsSEO'.strtoupper($code)};
+        }
         $product->price = $request->price;
-        $product->description = $request->description;
-        $product->short_description = $request->short_description;
+        $product->priority = $request->priority ?: 0;
         $product->category_id = $request->category;
-        $product->promo_action = $request->promo_action ?: 0;
-        $product->best = $request->best ?: 0;
-        $product->novelty = $request->novelty ?: 0;
-        $product->titleSEO = $request->titleSEO;
-        $product->descriptionSEO = $request->descriptionSEO;
-        $product->keywordsSEO = $request->keywordsSEO;
+        $product->youtube = $request->youtube;
         $product->save();
         $last_insereted_id = $product->id;
         if ($request->main_photo != null) {
             if($product->main_photo) {
                 Storage::disk('uploaded_img')->delete($product->main_photo);
             }
-            $product->main_photo = $request->main_photo->store('img/common/products/' . $last_insereted_id, ['disk' => 'uploaded_img']);
+            $product->main_photo = $request->main_photo->store('video/common/products/' . $last_insereted_id, ['disk' => 'uploaded_img']);
             $product->save();
         }
-
-        if ($request->attributes_names != null && $request->attributes_values != null) {
+        if ($request->main_video != null) {
+            if($product->main_video) {
+                Storage::disk('uploaded_img')->delete($product->main_video);
+            }
+            $product->main_video = $request->main_video->store('video/common/products/' . $last_insereted_id, ['disk' => 'uploaded_img']);
+            $product->save();
+        }
+        if (isset($request->attributes_namesRU) && $request->all()['attributes_namesRU'] != null && $request->all()['attributes_valuesRU'] != null) {
             $product->attributesNames()->detach();
             $product->attributesValues()->detach();
-            for($i = 0; $i < count($request->attributes_names); $i++) {
-            	$productsAttributesNames = ProductsAttributesName::all();
-            	$productsAttributesValues = ProductsAttributesValue::all();
-            	$productAttributesNameExist = 0;
-            	$productAttributesValueExist = 0;
-            	foreach($productsAttributesNames as $productsAttributesName) {
-            		if($request->attributes_names[$i] == $productsAttributesName->name) {
-            			$productAttributesNameExist = $productsAttributesName->id;
-            			break;
-            		}
-            	}
-            	foreach($productsAttributesValues as $productsAttributesValue) {
-            		if($request->attributes_values[$i] == $productsAttributesValue->value) {
-            			$productAttributesValueExist = $productsAttributesValue->id;
-            			break;
-            		}
-            	}
+            for($i = 0; $i < count($request->all()['attributes_namesRU']); $i++) {
+                $productsAttributesNames = ProductsAttributesName::all();
+                $productsAttributesValues = ProductsAttributesValue::all();
+                $productAttributesNameExist = 0;
+                $productAttributesValueExist = 0;
 
-            	if ($productAttributesNameExist) {
-            		$productsAttributesNameNew = ProductsAttributesName::find($productAttributesNameExist);
-            	} else {
-            		$productsAttributesNameNew = new ProductsAttributesName();
-	            	$productsAttributesNameNew->name = $request->attributes_names[$i];
-	            	$productsAttributesNameNew->save();
-            	}
-            	if ($productAttributesValueExist) {
-            		$productsAttributesValueNew = ProductsAttributesValue::find($productAttributesValueExist);
-            	} else {
-            		$productsAttributesValueNew = new ProductsAttributesValue();
-	            	$productsAttributesValueNew->value = $request->attributes_values[$i];
-	            	$productsAttributesValueNew->save();
-            	}
+                $counterN = 0;
+                $counterV = 0;
+                foreach(LaravelLocalization::getLocalesOrder() as $code => $locale) {
+                    foreach($productsAttributesNames as $productsAttributesName) {
+                        if($request->all()['attributes_names'.strtoupper($code)][$i] == $productsAttributesName->{'name'.strtoupper($code)}) {
+                            $productAttributesNameExist = $productsAttributesName->id;
+                            $counterN++;
+                            // break;
+                        }
+                    }
+                    foreach($productsAttributesValues as $productsAttributesValue) {
+                        if($request->all()['attributes_values'.strtoupper($code)][$i] == $productsAttributesValue->{'value'.strtoupper($code)}) {
+                            $productAttributesValueExist = $productsAttributesValue->id;
+                            $counterV++;
+                            // break;
+                        }
+                    }
+                }
+                if($counterN != count(LaravelLocalization::getLocalesOrder())) {
+                    $productAttributesNameExist = 0;
+                }
+                if($counterV != count(LaravelLocalization::getLocalesOrder())) {
+                    $productAttributesValueExist = 0;
+                }
+                if ($productAttributesNameExist != 0) {
+                    $productsAttributesNameNew = ProductsAttributesName::find($productAttributesNameExist);
+                } else {
+                    $productsAttributesNameNew = new ProductsAttributesName();
+                    foreach(LaravelLocalization::getLocalesOrder() as $code => $locale)
+                    {
+                        $productsAttributesNameNew->{'name'.strtoupper($code)} = $request->all()['attributes_names'.strtoupper($code)][$i];
+                    }
+                    $productsAttributesNameNew->save();
+                }
+                if ($productAttributesValueExist != 0) {
+                    $productsAttributesValueNew = ProductsAttributesValue::find($productAttributesValueExist);
+                } else {
+                    $productsAttributesValueNew = new ProductsAttributesValue();
+                    foreach(LaravelLocalization::getLocalesOrder() as $code => $locale)
+                    {
+                        $productsAttributesValueNew->{'value'.strtoupper($code)} = $request->all()['attributes_values'.strtoupper($code)][$i];
+                    }
+                    $productsAttributesValueNew->save();
+                }
 
-            	if ($productAttributesNameExist && $productAttributesValueExist && $productsAttributesName->values()->where('products_attributes_value_id', '=', $productAttributesValueExist)->whereHas('products',function($query)use($last_insereted_id){$query->where('product_id', '=', $last_insereted_id);})->first()) {
-            		continue;
-            	}
+                if ($productAttributesNameExist && $productAttributesValueExist && $productsAttributesName->values()->where('products_attributes_value_id', '=', $productAttributesValueExist)->whereHas('products',function($query)use($last_insereted_id){$query->where('product_id', '=', $last_insereted_id);})->first()) {
+                    continue;
+                }
 
-            	$productsAttributesNameNew->products()->attach($last_insereted_id); 
-            	$productsAttributesValueNew->products()->attach($last_insereted_id); 
+                $productsAttributesNameNew->products()->attach($last_insereted_id); 
+                $productsAttributesValueNew->products()->attach($last_insereted_id); 
 
-            	if ($productAttributesNameExist && $productAttributesValueExist && $productsAttributesName->values()->where('products_attributes_value_id', '=', $productAttributesValueExist)->first()) {
-            		continue;
-            	}
+                if ($productAttributesNameExist && $productAttributesValueExist && $productsAttributesName->values()->where('products_attributes_value_id', '=', $productAttributesValueExist)->first()) {
+                    continue;
+                }
 
-            	$productsAttributesValueNew->names()->attach($productsAttributesNameNew->id);
+                $productsAttributesValueNew->names()->attach($productsAttributesNameNew->id);
             }
         }
-
-        return redirect()->route('admin.products.index')->with(['message' => 'Товар успешно обновлен']);
+        return redirect()->to($request->redirectURL)->with(['message' => 'Товар успешно обновлен']);
     }
     
     public function destroy(int $id)
     {
         Storage::disk('uploaded_img')->deleteDirectory('img/common/products/' . $id);
+        Storage::disk('uploaded_img')->deleteDirectory('video/common/products/' . $id);
     	$product = Product::findOrFail($id);
     	$product->attributesNames()->detach();
         $product->attributesValues()->detach();
