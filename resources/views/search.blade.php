@@ -5,6 +5,58 @@
 		@include('shared.sidebar')
 		<div class="col-12 col-md-8 col-lg-9">
 			<h3 class="text-dark font-weight-bold text-uppercase text-center p-4">{{ __('pages.searchResult') }}</h3>
+			@if(count($categories))
+				<div class="container">
+					<h3 class="text-dark font-weight-bold text-uppercase text-center p-4">{{ __('pages.categoriesTitle') }}</h3>
+					<div class="row justify-content-center">
+			            @foreach($categories as $category)
+			                <div class="col-12 col-sm-6 my-3">
+			                    <div class="card h-100 shadow p-2">
+			                        <a class="card-link text-secondary p-1" href="{{route('page.category', $category->id)}}">
+			                            <div class="text-center">
+			                                <img class="img-fluid item-photo" src="{{$category->photo ? asset($category->photo) : asset('img/common/default.png')}}" alt="{{ $category->{'title' . strtoupper(App::getLocale())} }}">
+			                            </div>
+			                            <h5 class="text-center text-uppercase">{{$category->{'title' . strtoupper(App::getLocale())} }}</h5>
+			                        </a>
+			                    </div>
+			                </div>
+			            @endforeach
+			        </div>
+				</div>
+			@endif
+			@if(count($pages))		
+				<div class="container">
+					<h3 class="text-dark font-weight-bold text-uppercase text-center p-4">{{ __('pages.pagesTitle') }}</h3>
+					<div class="row justify-content-center">
+			            @foreach($pages as $page)
+			                <div class="col-12 my-3">
+			                    <div class="card h-100 shadow p-2">
+			                    	<a class="card-link text-secondary p-1" href="{{route($page->url)}}">
+		                            	<h5 class="text-justify">{!! $page->{'description' . strtoupper(App::getLocale())} !!}</h5>
+		                            </a>
+			                    </div>
+			                </div>
+			            @endforeach
+			        </div>
+				</div>
+			@endif
+			@if(count($partners))		
+				<div class="container">
+					<h3 class="text-dark font-weight-bold text-uppercase text-center p-4">{{ __('pages.partnersTitle') }}</h3>
+					<div class="row justify-content-center">
+			            @foreach($partners as $partner)
+			                <div class="col-12 col-sm-6 col-md-4 my-3">
+			                    <div class="card h-100 shadow p-2">
+		                            <div class="text-center">
+		                                <img class="img-fluid item-photo" src="{{$partner->main_photo ? asset($partner->main_photo) : asset('img/common/default.png')}}" alt="{{ $partner->{'title' . strtoupper(App::getLocale())} }}">
+		                            </div>
+		                            <h5 class="text-center text-uppercase">{{$partner->{'title' . strtoupper(App::getLocale())} }}</h5>
+			                    </div>
+			                </div>
+			            @endforeach
+			        </div>
+				</div>
+			@endif
 			@if(count($products))
 				<div class="container">
 					<h3 class="text-dark font-weight-bold text-uppercase text-center p-4">{{ __('pages.productsTitle') }}</h3>

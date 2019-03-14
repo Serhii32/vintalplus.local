@@ -14,8 +14,8 @@
                                         <img class="img-fluid" src="{{$product->main_photo ? asset($product->main_photo) : asset('img/common/default.png')}}" alt="{{ $product->{'title' . strtoupper(App::getLocale())} }}">
                                     </div>
                                     <h5 class="text-center text-uppercase">{{$product->{'title' . strtoupper(App::getLocale())} }}</h5>
-                                    <h6 class="text-center text-uppercase">{{ number_format($product->price, 2, '.', ' ') }} {{ __('pages.uah') }}</h6>
                                 </a>
+                                <h6 class="text-center text-uppercase">{{ number_format($product->price, 2, '.', ' ') }} {{ __('pages.uah') }}</h6>
                                 <input id="order-button" style="min-width: 120px;" onclick="showModal({{$product->id}})" class="btn btn-success mb-0 w-50 mt-auto mx-auto text-uppercase font-weight-bold" type="submit" value="Заказать">
                             </div>
                         </div>

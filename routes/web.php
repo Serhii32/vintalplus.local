@@ -93,9 +93,21 @@ Route::group(['namespace' => 'Admin', 'middleware' => 'auth', 'as' => 'admin.', 
 
 	Route::match(['put', 'patch'], 'pages/jobsUpdate', ['as' => 'pages.jobsUpdate', 'uses' => 'PagesController@jobsUpdate']);
 
+	Route::get('pages/contactsEdit', ['as' => 'pages.contactsEdit', 'uses' => 'PagesController@contactsEdit']);
+
+	Route::match(['put', 'patch'], 'pages/contactsUpdate', ['as' => 'pages.contactsUpdate', 'uses' => 'PagesController@contactsUpdate']);
+
+	Route::get('pages/deliveryPaymentEdit', ['as' => 'pages.deliveryPaymentEdit', 'uses' => 'PagesController@deliveryPaymentEdit']);
+
+	Route::match(['put', 'patch'], 'pages/deliveryPaymentUpdate', ['as' => 'pages.deliveryPaymentUpdate', 'uses' => 'PagesController@deliveryPaymentUpdate']);
+	
+	Route::get('pages/aboutEdit', ['as' => 'pages.aboutEdit', 'uses' => 'PagesController@aboutEdit']);
+
+	Route::match(['put', 'patch'], 'pages/aboutUpdate', ['as' => 'pages.aboutUpdate', 'uses' => 'PagesController@aboutUpdate']);
+
 	Route::get('pagesSEO', ['as' => 'pagesSEO.index', 'uses' => 'SEOController@index']);
 
-	Route::put('pagesSEO/update', ['as' => 'pagesSEO.update', 'uses' => 'SEOController@update']);
+	Route::match(['put', 'patch'], 'pagesSEO/update', ['as' => 'pagesSEO.update', 'uses' => 'SEOController@update']);
 
 	Route::get('products/productAttributeDestroy/{productId}/{attributeNameId}/{attributeValueId}', ['as' => 'products.productAttributeDestroy', 'uses' => 'ProductsController@productAttributeDestroy']);
 
@@ -104,10 +116,3 @@ Route::group(['namespace' => 'Admin', 'middleware' => 'auth', 'as' => 'admin.', 
 	Route::delete('uploaded-images/{imageName}', ['as' => 'uploaded-images.destroy', 'uses' => 'CKEditorImageController@destroy']);
 
 });
-
-/*
-
-add order via ajax to email
-add translation
-
-*/

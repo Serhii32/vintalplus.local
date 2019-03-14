@@ -18,7 +18,7 @@ class SEOController extends Controller
 
     public function update(StoreSEORequest $request)
     {
-    	for($i = 1; $i <= (count($request->all())-2)/(3*count(LaravelLocalization::getLocalesOrder())); $i++)
+    	for($i = 1; $i <= ((count($request->all())-2)/(3*count(LaravelLocalization::getLocalesOrder()))); $i++)
         {
     		$page = SEO_Page::findOrFail($i);
     		foreach(LaravelLocalization::getLocalesOrder() as $code => $locale)

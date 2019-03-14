@@ -17,6 +17,7 @@ class CreatePagesTable extends Migration
         Schema::create('pages', function (Blueprint $table) {
             $table->increments('id');
             $table->string('page');
+            $table->string('url');
             foreach(LaravelLocalization::getLocalesOrder() as $code => $locale)
             {
                 $table->text('description'.strtoupper($code))->nullable();

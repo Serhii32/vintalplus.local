@@ -57,6 +57,15 @@
             <li class="list-group-item list-group-item-action p-0">
                 <a class="nav-link text-dark font-weight-bold text-uppercase text-center" href="{{route('admin.projects.create')}}">Добавить проект</a>
             </li>
+            <li class="list-group-item list-group-item-action p-0">
+                <a class="nav-link text-dark font-weight-bold text-uppercase text-center" href="{{route('admin.pages.contactsEdit')}}">Страница контакты</a>
+            </li>
+            <li class="list-group-item list-group-item-action p-0">
+                <a class="nav-link text-dark font-weight-bold text-uppercase text-center" href="{{route('admin.pages.deliveryPaymentEdit')}}">Страница доставка и оплата</a>
+            </li>
+            <li class="list-group-item list-group-item-action p-0">
+                <a class="nav-link text-dark font-weight-bold text-uppercase text-center" href="{{route('admin.pages.aboutEdit')}}">Страница о нас</a>
+            </li>
         </ul>
     </div>
 </div>

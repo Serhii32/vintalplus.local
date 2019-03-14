@@ -11,6 +11,7 @@
     <meta name="author" content="serhii.bondarenko.ria@gmail.com">
     <meta name="keywords" content="{{ isset($pageKeywords) ? $pageKeywords : 'Продукция для перемещения грузов' }}">
     <link rel="canonical" href="{{ URL::current() }}"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
@@ -111,39 +112,39 @@
 	<nav style="background: #292929">
 		<div class="container" style="color: #fff">
 			<nav class="navbar navbar-expand-lg navbar-light p-0">
-				<button class="navbar-toggler m-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2" aria-expanded="false" aria-label="Toggle navigation">
+				<button style="background: white;" class="navbar-toggler mx-auto my-1" type="button" data-toggle="collapse" data-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2" aria-expanded="false" aria-label="Toggle navigation">
 				    <span class="navbar-toggler-icon"></span>
 				</button>
 			  	<div class="collapse navbar-collapse" id="navbarSupportedContent2">
 				    <ul class="navbar-nav m-auto">
-				      	<li class="nav-item main-menu-item py-2" @isset($aboutActive)style="background: #5cb85c;"@endisset>
+				      	<li class="nav-item main-menu-item py-2 text-center" @isset($aboutActive)style="background: #5cb85c;"@endisset>
 				        	<a class="nav-link font-weight-bold text-uppercase text-white" href="{{route('page.about')}}">{{ __('menu.about') }}</a>
 				      	</li>
-				      	<li class="nav-item main-menu-item py-2" @isset($productsActive)style="background: #5cb85c;"@endisset>
+				      	<li class="nav-item main-menu-item py-2 text-center" @isset($productsActive)style="background: #5cb85c;"@endisset>
 				        	<a class="nav-link font-weight-bold text-uppercase text-white" href="{{route('page.products')}}">{{ __('menu.products') }}</a>
 				      	</li>
-				      	<li class="nav-item main-menu-item py-2" @isset($contactsActive)style="background: #5cb85c;"@endisset>
+				      	<li class="nav-item main-menu-item py-2 text-center" @isset($contactsActive)style="background: #5cb85c;"@endisset>
 				        	<a class="nav-link font-weight-bold text-uppercase text-white" href="{{route('page.contacts')}}">{{ __('menu.contacts') }}</a>
 				      	</li>
-				      	<li class="nav-item main-menu-item py-2" @isset($partnersActive)style="background: #5cb85c;"@endisset>
+				      	<li class="nav-item main-menu-item py-2 text-center" @isset($partnersActive)style="background: #5cb85c;"@endisset>
 				        	<a class="nav-link font-weight-bold text-uppercase text-white" href="{{route('page.partners')}}">{{ __('menu.partners') }}</a>
 				      	</li>
-				      	<li class="nav-item main-menu-item py-2" @isset($delivery_and_paymentActive)style="background:  #5cb85c;"@endisset>
+				      	<li class="nav-item main-menu-item py-2 text-center" @isset($delivery_and_paymentActive)style="background:  #5cb85c;"@endisset>
 				        	<a class="nav-link font-weight-bold text-uppercase text-white" href="{{route('page.delivery-payment')}}">{{ __('menu.delivery_and_payment') }}</a>
 				      	</li>
-				      	<li class="nav-item main-menu-item py-2" @isset($articlesActive)style="background: #5cb85c;"@endisset>
+				      	<li class="nav-item main-menu-item py-2 text-center" @isset($articlesActive)style="background: #5cb85c;"@endisset>
 				        	<a class="nav-link font-weight-bold text-uppercase text-white" href="{{route('page.articles')}}">{{ __('menu.articles') }}</a>
 				      	</li>
-				      	<li class="nav-item main-menu-item py-2" @isset($newsActive)style="background: #5cb85c;"@endisset>
+				      	<li class="nav-item main-menu-item py-2 text-center" @isset($newsActive)style="background: #5cb85c;"@endisset>
 				        	<a class="nav-link font-weight-bold text-uppercase text-white" href="{{route('page.records')}}">{{ __('menu.news') }}</a>
 				      	</li>
-				      	<li class="nav-item main-menu-item py-2" @isset($projectsActive)style="background: #5cb85c;"@endisset>
+				      	<li class="nav-item main-menu-item py-2 text-center" @isset($projectsActive)style="background: #5cb85c;"@endisset>
 				        	<a class="nav-link font-weight-bold text-uppercase text-white" href="{{route('page.projects')}}">{{ __('menu.projects') }}</a>
 				      	</li>
-				      	<li class="nav-item main-menu-item py-2" @isset($jobsActive)style="background: #5cb85c;"@endisset>
+				      	<li class="nav-item main-menu-item py-2 text-center" @isset($jobsActive)style="background: #5cb85c;"@endisset>
 				        	<a class="nav-link font-weight-bold text-uppercase text-white" href="{{route('page.jobs')}}">{{ __('menu.jobs') }}</a>
 				      	</li>
-				      	<li class="nav-item main-menu-item py-2" @isset($catalogActive)style="background: #5cb85c;"@endisset>
+				      	<li class="nav-item main-menu-item py-2 text-center" @isset($catalogActive)style="background: #5cb85c;"@endisset>
 				        	<a class="nav-link font-weight-bold text-uppercase text-white" href="{{route('page.catalog')}}">{{ __('menu.catalog') }}</a>
 				      	</li>
 				    </ul>
@@ -168,7 +169,7 @@
 				</div>
 				<div class="col-12 col-md-3 m-auto">
 					<h5><span class="font-weight-bold text-uppercase">{{ __('pages.schedule') }}:</span><br>{{ __('pages.monFri') }}: 8.00-17.00<br>{{ __('pages.satSun') }}: {{ __('pages.dayOff') }}</h5>
-					<h5><a style="color:#4267b2; font-size: 40px;" href="https://www.facebook.com" target="_blanc"><i class="fab fa-facebook"></i></a> &nbsp;&nbsp;&nbsp;&nbsp; <a style="color:#7c529e; font-size: 40px;" href="viber://add?number=+380679756530"><i class="fab fa-viber"></i></a></h5>
+					<h5><a style="color:#4267b2; font-size: 40px;" href="https://www.facebook.com/Modul-287408068641539" target="_blanc"><i class="fab fa-facebook"></i></a> &nbsp;&nbsp;&nbsp;&nbsp; <a style="color:#7c529e; font-size: 40px;" href="viber://add?number=+380679756530"><i class="fab fa-viber"></i></a></h5>
 				</div>
 			</div>
 			<h5 class="font-weight-bold text-uppercase text-center mb-0">

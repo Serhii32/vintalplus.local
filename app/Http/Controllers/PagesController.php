@@ -42,36 +42,6 @@ class PagesController extends Controller
     	return view('index', compact(['homeActive', 'services', 'categories', 'pageTitle', 'pageDescription', 'pageKeywords', 'partners']));
     }
 
-    public function deliveryPayment()
-    {
-        $pageSEO = SEO_Page::where('page', '=', 'Доставка и оплата')->first();
-        $pageTitle = $pageSEO->{'titleSEO'.$this->locale};
-        $pageDescription = $pageSEO->{'descriptionSEO'.$this->locale};
-        $pageKeywords = $pageSEO->{'keywordsSEO'.$this->locale};
-        $delivery_and_paymentActive = true;
-        return view('delivery-payment', ['productsCategories' => $this->productsCategories, 'menuRecords' => $this->menuRecords], compact(['delivery_and_paymentActive', 'pageTitle', 'pageDescription', 'pageKeywords']));
-    }
-
-    public function about()
-    {
-        $pageSEO = SEO_Page::where('page', '=', 'О нас')->first();
-        $pageTitle = $pageSEO->{'titleSEO'.$this->locale};
-        $pageDescription = $pageSEO->{'descriptionSEO'.$this->locale};
-        $pageKeywords = $pageSEO->{'keywordsSEO'.$this->locale};
-        $aboutActive = true;
-        return view('about', ['productsCategories' => $this->productsCategories, 'menuRecords' => $this->menuRecords], compact(['aboutActive', 'pageTitle', 'pageDescription', 'pageKeywords']));
-    }
-
-    public function contacts()
-    {
-        $pageSEO = SEO_Page::where('page', '=', 'Контакты')->first();
-        $pageTitle = $pageSEO->{'titleSEO'.$this->locale};
-        $pageDescription = $pageSEO->{'descriptionSEO'.$this->locale};
-        $pageKeywords = $pageSEO->{'keywordsSEO'.$this->locale};
-        $contactsActive = true;
-        return view('contacts', ['productsCategories' => $this->productsCategories, 'menuRecords' => $this->menuRecords], compact(['contactsActive', 'pageTitle', 'pageDescription', 'pageKeywords']));
-    }
-
     public function products()
     {
         $pageSEO = SEO_Page::where('page', '=', 'Продукция')->first();
@@ -145,6 +115,39 @@ class PagesController extends Controller
         $pageContent = Page::where('page', '=', 'Вакансии')->first();
     	$jobsActive = true;
     	return view('jobs', ['productsCategories' => $this->productsCategories, 'menuRecords' => $this->menuRecords], compact(['jobsActive', 'pageContent', 'pageTitle', 'pageDescription', 'pageKeywords']));
+    }
+
+    public function deliveryPayment()
+    {
+        $pageSEO = SEO_Page::where('page', '=', 'Доставка и оплата')->first();
+        $pageTitle = $pageSEO->{'titleSEO'.$this->locale};
+        $pageDescription = $pageSEO->{'descriptionSEO'.$this->locale};
+        $pageKeywords = $pageSEO->{'keywordsSEO'.$this->locale};
+        $pageContent = Page::where('page', '=', 'Доставка и оплата')->first();
+        $delivery_and_paymentActive = true;
+        return view('delivery-payment', ['productsCategories' => $this->productsCategories, 'menuRecords' => $this->menuRecords], compact(['delivery_and_paymentActive', 'pageContent', 'pageTitle', 'pageDescription', 'pageKeywords']));
+    }
+
+    public function contacts()
+    {
+        $pageSEO = SEO_Page::where('page', '=', 'Контакты')->first();
+        $pageTitle = $pageSEO->{'titleSEO'.$this->locale};
+        $pageDescription = $pageSEO->{'descriptionSEO'.$this->locale};
+        $pageKeywords = $pageSEO->{'keywordsSEO'.$this->locale};
+        $pageContent = Page::where('page', '=', 'Контакты')->first();
+        $contactsActive = true;
+        return view('contacts', ['productsCategories' => $this->productsCategories, 'menuRecords' => $this->menuRecords], compact(['contactsActive', 'pageContent', 'pageTitle', 'pageDescription', 'pageKeywords']));
+    }
+
+    public function about()
+    {
+        $pageSEO = SEO_Page::where('page', '=', 'О нас')->first();
+        $pageTitle = $pageSEO->{'titleSEO'.$this->locale};
+        $pageDescription = $pageSEO->{'descriptionSEO'.$this->locale};
+        $pageKeywords = $pageSEO->{'keywordsSEO'.$this->locale};
+        $pageContent = Page::where('page', '=', 'О нас')->first();
+        $aboutActive = true;
+        return view('about', ['productsCategories' => $this->productsCategories, 'menuRecords' => $this->menuRecords], compact(['aboutActive', 'pageContent', 'pageTitle', 'pageDescription', 'pageKeywords']));
     }
 
     public function services()
@@ -252,16 +255,20 @@ class PagesController extends Controller
         $pageDescription = $pageSEO->{'descriptionSEO'.$this->locale};
         $pageKeywords = $pageSEO->{'keywordsSEO'.$this->locale};
         $searchPhrase = $request->searchPhrase;
-        $products = Product::where('title'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->get();
-        $records = Record::where('title'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->get();
-        $articles = Article::where('title'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->get();
-        $projects = Project::where('title'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->get();
-        $services = Service::where('title'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->get();
+        $products = Product::where('title'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->orWhere('short_description'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->orWhere('description'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->get();
+        $records = Record::where('title'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->orWhere('short_description'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->orWhere('description'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->get();
+        $articles = Article::where('title'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->orWhere('short_description'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->orWhere('description'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->get();
+        $services = Service::where('title'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->orWhere('short_description'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->orWhere('description'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->get();
+        $projects = Project::where('title'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->orWhere('short_description'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->orWhere('description'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->get();
+        $categories = ProductsCategory::where('title'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->orWhere('short_description'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->get();
+        $partners = Partner::where('title'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->get();
+        
+        $pages = Page::where('description'.strtoupper($this->locale), 'like', '%'.$searchPhrase.'%')->get();
         // $products = new Collection();
         // foreach(LaravelLocalization::getLocalesOrder() as $code => $locale)
         // {
         //     $products = $products->merge(Product::where('title'.strtoupper($code), 'like', $searchPhrase.'%')->get());
         // }
-        return view('search', ['productsCategories' => $this->productsCategories, 'menuRecords' => $this->menuRecords], compact(['searchPhrase', 'pageTitle', 'pageDescription', 'pageKeywords', 'products', 'records', 'articles', 'projects', 'services']));
+        return view('search', ['productsCategories' => $this->productsCategories, 'menuRecords' => $this->menuRecords], compact(['searchPhrase', 'pageTitle', 'pageDescription', 'pageKeywords', 'products', 'records', 'articles', 'projects', 'services', 'partners', 'pages', 'categories']));
     }
 }

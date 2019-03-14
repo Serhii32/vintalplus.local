@@ -5,7 +5,7 @@
 		@include('shared.sidebar')
 		<div class="col-12 col-md-8 col-lg-9">
 			<h3 class="text-dark font-weight-bold text-uppercase text-center p-4">{{ __('pages.contactsTitle') }}</h3>
-			<div class="container">
+			{{-- <div class="container">
 				<div class="row my-5 border-bottom">
 					<div class="col-md-6">
 						<h4 class="font-weight-bold">{{ __('pages.contactsReception') }}</h4>
@@ -42,7 +42,8 @@
 						<h4><i class="far fa-envelope"></i> nvp.modul@gmail.com</h4>
 					</div>
 				</div>
-			</div>
+			</div> --}}
+			{!! $pageContent->{'description' . strtoupper(App::getLocale())} !!}
 		</div>
 	</div>
 </div>

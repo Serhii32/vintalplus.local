@@ -60,7 +60,8 @@ class ProductsController extends Controller
     {
         $categories = ProductsCategory::pluck('titleRU','id')->all();
         $pageTitle = 'Добавить товар';
-        return view('admin.products.products-create', compact(['categories', 'pageTitle']), ['attributesNamesArray' => $this->attributesNamesArray, 'attributesValuesArray' => $this->attributesValuesArray]);
+        $localizations = LaravelLocalization::getLocalesOrder();
+        return view('admin.products.products-create', compact(['categories', 'pageTitle', 'localizations']), ['attributesNamesArray' => $this->attributesNamesArray, 'attributesValuesArray' => $this->attributesValuesArray]);
     }
     
     public function store(StoreProductRequest $request)

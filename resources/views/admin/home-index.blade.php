@@ -157,6 +157,31 @@
                                 </a>
                             </div>
                         </div>
+
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-3">
+                            <div class="card h-100 shadow">
+                                <a class="card-link text-secondary p-1" href="{{route('admin.pages.contactsEdit')}}">
+                                    <h1 class="display-1 text-center"><i class="fas fa-comments"></i></h1>
+                                    <h4 class="text-center text-uppercase">Страница контакты</h4>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-3">
+                            <div class="card h-100 shadow">
+                                <a class="card-link text-secondary p-1" href="{{route('admin.pages.deliveryPaymentEdit')}}">
+                                    <h1 class="display-1 text-center"><i class="fas fa-truck"></i></h1>
+                                    <h4 class="text-center text-uppercase">Страница доставка и оплата</h4>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-3">
+                            <div class="card h-100 shadow">
+                                <a class="card-link text-secondary p-1" href="{{route('admin.pages.aboutEdit')}}">
+                                    <h1 class="display-1 text-center"><i class="fas fa-retweet"></i></h1>
+                                    <h4 class="text-center text-uppercase">Страница о нас</h4>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

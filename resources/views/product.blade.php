@@ -150,10 +150,10 @@
 
                         <div class="row mx-2">
                             <div class="col-12 col-sm-6 py-2 border">
-                                <p class="text-uppercase font-weight-bold col-12">{{$attributesNamesOrderedArray[$i]->{'name' . strtoupper(App::getLocale())} }}</p>
+                                <p class="text-uppercase font-weight-bold col-12 mb-0">{{$attributesNamesOrderedArray[$i]->{'name' . strtoupper(App::getLocale())} }}</p>
                             </div>
                             <div class="col-12 col-sm-6 py-2 border">
-                                <p class="text-uppercase font-weight-bold col-12">{{$attributesNamesOrderedArray[$i]->values()->whereHas('products', function($query)use($product){$query->where('product_id', '=', $product->id);})->get()[$k]->{'value' . strtoupper(App::getLocale())} }}</p>
+                                <p class="text-uppercase font-weight-bold col-12 mb-0">{{$attributesNamesOrderedArray[$i]->values()->whereHas('products', function($query)use($product){$query->where('product_id', '=', $product->id);})->get()[$k]->{'value' . strtoupper(App::getLocale())} }}</p>
                             </div>
                         </div>
                     @endfor
@@ -171,7 +171,7 @@
                         @foreach($categoryProducts as $categoryProduct)
                             <div class="carousel-cell" style="background: transparent; width: 33%;">
                                 <a class="card-link text-dark" href="{{route('page.product', $categoryProduct->id)}}">
-                                    <img style="display: block; margin: auto; height: 300px; object-fit: cover;" src="{{$categoryProduct->main_photo ? asset($categoryProduct->main_photo) : asset('img/common/default.png')}}" alt="{{ $categoryProduct->{'title' . strtoupper(App::getLocale())} }}" src="{{asset('img/common/default.png') }}">
+                                    <img style="display: block; margin: auto; height: 300px; /*object-fit: cover;*/ width: 100%;" src="{{$categoryProduct->main_photo ? asset($categoryProduct->main_photo) : asset('img/common/default.png')}}" alt="{{ $categoryProduct->{'title' . strtoupper(App::getLocale())} }}" src="{{asset('img/common/default.png') }}">
                                     <h3 class="text-center text-uppercase font-weight-bold">{{ $categoryProduct->{'title' . strtoupper(App::getLocale())} }}</h3>
                                 </a>
                             </div>

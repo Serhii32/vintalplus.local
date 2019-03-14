@@ -5,9 +5,10 @@
 		@include('shared.sidebar')
 		<div class="col-12 col-md-8 col-lg-9">
 			<h3 class="text-dark font-weight-bold text-uppercase text-center p-4">{{ __('pages.aboutTitle') }}</h3>
-			<h4 class="py-4 text-justify">
+			{{-- <h4 class="py-4 text-justify">
 				{{ __('pages.aboutText') }}
-			</h4>
+			</h4> --}}
+			{!! $pageContent->{'description' . strtoupper(App::getLocale())} !!}
 		</div>
 	</div>
 </div>
