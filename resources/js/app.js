@@ -9,9 +9,9 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
-import BootstrapVue from 'bootstrap-vue';
+// import BootstrapVue from 'bootstrap-vue';
 
-Vue.use(BootstrapVue);
+// Vue.use(BootstrapVue);
 
 /**
  * The following block of code may be used to automatically register your
@@ -21,7 +21,7 @@ Vue.use(BootstrapVue);
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
-Vue.component('product-create-component', require('./components/ProductCreateComponent.vue').default);
+// Vue.component('product-create-component', require('./components/ProductCreateComponent.vue').default);
 
 // const files = require.context('./', true, /\.vue$/i)
 

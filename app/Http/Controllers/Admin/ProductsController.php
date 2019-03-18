@@ -60,8 +60,7 @@ class ProductsController extends Controller
     {
         $categories = ProductsCategory::pluck('titleRU','id')->all();
         $pageTitle = 'Добавить товар';
-        $localizations = LaravelLocalization::getLocalesOrder();
-        return view('admin.products.products-create', compact(['categories', 'pageTitle', 'localizations']), ['attributesNamesArray' => $this->attributesNamesArray, 'attributesValuesArray' => $this->attributesValuesArray]);
+        return view('admin.products.products-create', compact(['categories', 'pageTitle']), ['attributesNamesArray' => $this->attributesNamesArray, 'attributesValuesArray' => $this->attributesValuesArray]);
     }
     
     public function store(StoreProductRequest $request)
@@ -215,6 +214,8 @@ class ProductsController extends Controller
             $product->main_video = $request->main_video->store('video/common/products/' . $last_insereted_id, ['disk' => 'uploaded_img']);
             $product->save();
         }
+
+        dd($request);
         if (isset($request->attributes_namesRU) && $request->all()['attributes_namesRU'] != null && $request->all()['attributes_valuesRU'] != null) {
             $product->attributesNames()->detach();
             $product->attributesValues()->detach();

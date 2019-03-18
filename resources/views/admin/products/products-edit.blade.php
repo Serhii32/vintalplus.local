@@ -93,23 +93,46 @@
                                 @if(!empty(old('attributes_names')) || !empty($product->attributesNames()->get()))
                                     @if(!empty($product->attributesNames()->get()))
                                         @php $i = 0; $k = 0; $previous = ''; $attributesNamesOrderedArray = $product->attributesNames()->orderBy('nameRU')->get(); @endphp
+                                        {{-- {{dd($attributesNamesOrderedArray)}} --}}
                                         @for($i; $i < count($attributesNamesOrderedArray); $i++)
                                             <div class="existed-attributes form-group py-4 border-bottom" id="attribute{{$i+1}}">
                                                 <div class="row">
                                                     <p class="text-uppercase font-weight-bold col-12 col-sm-6">Характеристика {{$i+1}}</p>
-
+                                                    
                                                     @if($previous == $attributesNamesOrderedArray[$i]->nameRU)
                                                         @php $k++; @endphp
                                                     @else
                                                         @php $k=0; @endphp
                                                     @endif
                                                     @php $previous = $attributesNamesOrderedArray[$i]->nameRU @endphp
+
+                                                    {{-- one table with names and values where each name has one value
+                                                        
+                                                        or name has many values and value has only one name and one product
+                                                     --}}
                                                    
                                                     <div class="col-12 col-sm-6">
                                                         <a class="float-right btn btn-danger text-uppercase font-weight-bold" onclick="return confirm('Подтвердить удаление?')" href="{{route('admin.products.productAttributeDestroy', [$product->id, $attributesNamesOrderedArray[$i]->id, $attributesNamesOrderedArray[$i]->values()->whereHas('products', function($query)use($product){$query->where('product_id', '=', $product->id);})->get()[$k]->id])}}">Удалить</a>
                                                     </div>
 
                                                 </div>
+
+
+
+                                                <div class="row">
+                                                    <div class="col-12 col-sm-6 py-2">
+                                                        <label class="text-uppercase font-weight-bold col-12" for="attribute_priority_{{$i+1}}">Приоритет характеристики:</label>
+                                                        <input type="number" id="attribute_priority_{{$i+1}}" name="attribute_priority_{{$i+1}}" placeholder="Приоритет характеристики" 
+                                                        @if($errors->has('attribute_priority_'.$i)) class="form-control is-invalid" 
+                                                        @else class="form-control"
+                                                        @endif 
+                                                        {{-- value="{{old('attribute_priority_'.$i) ?: $attributesNamesOrderedArray[$i]->{'name'.strtoupper($code)} }}" --}}>
+                                                        <span class="text-danger">{{ $errors->first('attribute_priority_'.$i) }}</span>
+                                                    </div>
+                                                </div>
+
+
+
                                                 @foreach(LaravelLocalization::getLocalesOrder() as $code => $locale)
                                                     <div class="row">
                                                         <div class="col-12 col-sm-6 py-2">
@@ -128,6 +151,7 @@
                                                             @else class="form-control autocomplete-list-target-value{{strtoupper($code)}}"
                                                             @endif
                                                             value="{{old('attributes_values'.strtoupper($code).'.'.$i) ?: $attributesNamesOrderedArray[$i]->values()->whereHas('products', function($query)use($product){$query->where('product_id', '=', $product->id);})->get()[$k]->{'value'.strtoupper($code)} }}">
+                                                            {{-- {{dd($attributesNamesOrderedArray[$i]->values()->whereHas('products', function($query)use($product){$query->where('product_id', '=', $product->id);})->get())}} --}}
                                                             <span class="text-danger">{{ $errors->first('attributes_values_'.strtoupper($code).'_'.$i) }}</span>
                                                         </div>
                                                     </div>

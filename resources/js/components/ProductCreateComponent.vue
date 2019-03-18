@@ -60,20 +60,47 @@
                     </b-form-group>
 
 
-					<div v-for="(localization, index)  in localizations" :key="localization.regional">
-						<b-form-group label-class="text-uppercase font-weight-bold" :label="'Название товара: '+index" label-for="title">
-	                        <b-form-input :id="'title'+index" :name="'title'+index" :state="Boolean(errors && errors.title && errors.title[0])?false:null" type="text" placeholder="Название товара" v-model="fields.title"></b-form-input>
-	                        <div v-if="errors && errors.title">
-	                            <b-alert class="text-center" variant="danger" dismissible fade :show="true">{{ errors.title[0] }}</b-alert>
-	                        </div>
-	                    </b-form-group>
-	                   <!--  <div class="form-group">
-                            {!! Form::label('title'.strtoupper($code), 'Название товара '.strtoupper($code).':', ['class' => 'text-uppercase font-weight-bold']) !!}
-                            {!! Form::text('title'.strtoupper($code), old('title'.strtoupper($code)), ['placeholder'=>'Название товара '.strtoupper($code)] + ($errors->has('title'.strtoupper($code)) ? ['class'=>'form-control is-invalid'] : ['class'=>'form-control'])) !!}
-                            <span class="text-danger">{{ $errors->first('title'.strtoupper($code)) }}</span>
-                        </div> -->
-					</div>
 
+
+					<b-form-group label-class="text-uppercase font-weight-bold" label="Название товара RU:" label-for="titleRU">
+                        <b-form-input id="titleRU" name="titleRU" :state="Boolean(errors && errors.titleRU && errors.titleRU[0])?false:null" type="text" placeholder="Название товара RU" v-model="fields.titleRU"></b-form-input>
+                        <div v-if="errors && errors.titleRU">
+                            <b-alert class="text-center" variant="danger" dismissible fade :show="true">{{ errors.titleRU[0] }}</b-alert>
+                        </div>
+                    </b-form-group>
+                    <b-form-group label-class="text-uppercase font-weight-bold" label="Название товара UK:" label-for="titleUK">
+                        <b-form-input id="titleUK" name="titleUK" :state="Boolean(errors && errors.titleUK && errors.titleUK[0])?false:null" type="text" placeholder="Название товара UK" v-model="fields.titleUK"></b-form-input>
+                        <div v-if="errors && errors.titleUK">
+                            <b-alert class="text-center" variant="danger" dismissible fade :show="true">{{ errors.titleUK[0] }}</b-alert>
+                        </div>
+                    </b-form-group>
+                    <b-form-group label-class="text-uppercase font-weight-bold" label="Название товара EN:" label-for="titleEN">
+                        <b-form-input id="titleEN" name="titleEN" :state="Boolean(errors && errors.titleEN && errors.titleEN[0])?false:null" type="text" placeholder="Название товара EN" v-model="fields.titleEN"></b-form-input>
+                        <div v-if="errors && errors.titleEN">
+                            <b-alert class="text-center" variant="danger" dismissible fade :show="true">{{ errors.titleEN[0] }}</b-alert>
+                        </div>
+                    </b-form-group>
+
+
+                    <b-form-group label-class="text-uppercase font-weight-bold" label="Краткое описание RU:" label-for="short_descriptionRU">
+                        <b-form-textarea id="short_descriptionRU" name="short_descriptionRU" :state="Boolean(errors && errors.short_descriptionRU && errors.short_descriptionRU[0])?false:null" placeholder="SEO описання RU" v-model="fields.short_descriptionRU"></b-form-textarea>
+                        <div v-if="errors && errors.short_descriptionRU">
+                            <b-alert class="text-center" variant="danger" dismissible fade :show="true">{{ errors.short_descriptionRU[0] }}</b-alert>
+                        </div>
+                    </b-form-group>
+                    <b-form-group label-class="text-uppercase font-weight-bold" label="Краткое описание UK:" label-for="short_descriptionUK">
+                        <b-form-textarea id="short_descriptionUK" name="short_descriptionUK" :state="Boolean(errors && errors.short_descriptionUK && errors.short_descriptionUK[0])?false:null" placeholder="SEO описання UK" v-model="fields.short_descriptionUK"></b-form-textarea>
+                        <div v-if="errors && errors.short_descriptionUK">
+                            <b-alert class="text-center" variant="danger" dismissible fade :show="true">{{ errors.short_descriptionUK[0] }}</b-alert>
+                        </div>
+                    </b-form-group>
+                    <b-form-group label-class="text-uppercase font-weight-bold" label="Краткое описание EN:" label-for="short_descriptionEN">
+                        <b-form-textarea id="short_descriptionEN" name="short_descriptionEN" :state="Boolean(errors && errors.short_descriptionEN && errors.short_descriptionEN[0])?false:null" placeholder="SEO описання EN" v-model="fields.short_descriptionEN"></b-form-textarea>
+                        <div v-if="errors && errors.short_descriptionEN">
+                            <b-alert class="text-center" variant="danger" dismissible fade :show="true">{{ errors.short_descriptionEN[0] }}</b-alert>
+                        </div>
+                    </b-form-group>
+                    
 
                     <b-form-group>
                         <b-button type="submit" class="btn btn-success w-100 text-uppercase font-weight-bold">Сохранить</b-button>
@@ -87,16 +114,7 @@
                
                         
                         <!-- @foreach(LaravelLocalization::getLocalesOrder() as $code => $locale)
-                            <div class="form-group">
-                                {!! Form::label('title'.strtoupper($code), 'Название товара '.strtoupper($code).':', ['class' => 'text-uppercase font-weight-bold']) !!}
-                                {!! Form::text('title'.strtoupper($code), old('title'.strtoupper($code)), ['placeholder'=>'Название товара '.strtoupper($code)] + ($errors->has('title'.strtoupper($code)) ? ['class'=>'form-control is-invalid'] : ['class'=>'form-control'])) !!}
-                                <span class="text-danger">{{ $errors->first('title'.strtoupper($code)) }}</span>
-                            </div>
-                            <div class="form-group">
-                                {!! Form::label('short_description'.strtoupper($code), 'Краткое описание '.strtoupper($code).':', ['class' => 'text-uppercase font-weight-bold']) !!}
-                                {!! Form::textarea('short_description'.strtoupper($code), old('short_description'.strtoupper($code)), ['placeholder' => 'Краткое описание '.strtoupper($code)] + ($errors->has('short_description'.strtoupper($code)) ? ['class'=>'form-control is-invalid'] : ['class'=>'form-control'])) !!}
-                                <span class="text-danger">{{ $errors->first('short_description'.strtoupper($code)) }}</span>
-                            </div>
+                           
                             <div class="form-group">
                                 {!! Form::label('description'.strtoupper($code), 'Основная часть '.strtoupper($code).':', ['class' => 'text-uppercase font-weight-bold']) !!}
                                 {!! Form::textarea('description'.strtoupper($code), old('description'.strtoupper($code)), ($errors->has('description'.strtoupper($code)) ? ['class'=>'form-control is-invalid editor'] : ['class'=>'form-control editor'])) !!}
@@ -152,13 +170,13 @@
                                         @endforeach
                                     </div>
                                 @endfor
-                            @endif
+                            @endif -->
                         </div>
                         <button id="add-new-attribute" type="button" class="btn btn-primary w-100 my-4 text-uppercase font-weight-bold" onclick="addNewAttribute()">Добавить характеристику товара</button>
                         <div class="form-group">
                             {!! Form::submit('Добавить товар', ['class'=>'btn btn-success w-100 text-uppercase font-weight-bold']) !!}
                         </div>
- -->
+
 
 <script>
 	export default {
