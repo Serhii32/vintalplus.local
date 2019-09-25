@@ -13,7 +13,7 @@ class Product extends Model
 
     public function attributesNames()
     {
-    	return $this->belongsToMany('App\ProductsAttributesName', 'product_products_attributes_name', 'product_id', 'products_attributes_name_id')->withTimestamps();
+    	return $this->belongsToMany('App\ProductsAttributesName', 'product_products_attributes_name', 'product_id', 'products_attributes_name_id')->withPivot('priority')->withTimestamps();
     }
 
     public function attributesValues()

@@ -19,6 +19,9 @@ class ProductProductsAttributesName extends Migration
             $table->foreign('product_id')->references('id')->on('products');
             $table->integer('products_attributes_name_id')->unsigned();
             $table->foreign('products_attributes_name_id', 'pan1_id_foreign')->references('id')->on('products_attributes_names');
+
+            $table->integer('priority')->default(0);
+            
             $table->timestamps();
         });
     }

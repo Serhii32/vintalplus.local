@@ -146,7 +146,7 @@ class ProductsController extends Controller
             		continue;
             	}
 
-            	$productsAttributesNameNew->products()->attach($last_insereted_id); 
+            	$productsAttributesNameNew->products()->attach($last_insereted_id, ['priority' => $request->{'attribute_priority_'.($i+1)}?:0]);
             	$productsAttributesValueNew->products()->attach($last_insereted_id); 
 
             	if ($productAttributesNameExist && $productAttributesValueExist && $productsAttributesName->values()->where('products_attributes_value_id', '=', $productAttributesValueExist)->first()) {
@@ -215,7 +215,7 @@ class ProductsController extends Controller
             $product->save();
         }
 
-        dd($request);
+        // dd($request);
         if (isset($request->attributes_namesRU) && $request->all()['attributes_namesRU'] != null && $request->all()['attributes_valuesRU'] != null) {
             $product->attributesNames()->detach();
             $product->attributesValues()->detach();
@@ -273,8 +273,8 @@ class ProductsController extends Controller
                 if ($productAttributesNameExist && $productAttributesValueExist && $productsAttributesName->values()->where('products_attributes_value_id', '=', $productAttributesValueExist)->whereHas('products',function($query)use($last_insereted_id){$query->where('product_id', '=', $last_insereted_id);})->first()) {
                     continue;
                 }
+                $productsAttributesNameNew->products()->attach($last_insereted_id, ['priority' => $request->{'attribute_priority_'.($i+1)}?:0]);
 
-                $productsAttributesNameNew->products()->attach($last_insereted_id); 
                 $productsAttributesValueNew->products()->attach($last_insereted_id); 
 
                 if ($productAttributesNameExist && $productAttributesValueExist && $productsAttributesName->values()->where('products_attributes_value_id', '=', $productAttributesValueExist)->first()) {

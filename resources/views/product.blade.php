@@ -138,7 +138,7 @@
                 @if(!empty($product->attributesNames()->first()))
                 	<h4 class="text-center">{{ __('pages.productAttributes') }}</h4>
 
-                    @php $k = 0; $previous = ''; $attributesNamesOrderedArray = $product->attributesNames()->orderBy('name'.strtoupper(App::getLocale()))->get(); @endphp
+                    @php $k = 0; $previous = ''; $attributesNamesOrderedArray = $product->attributesNames()->orderBy('pivot_priority')->get(); @endphp
                     @for($i=0; $i < count($attributesNamesOrderedArray); $i++)
 
                         @if($previous == $attributesNamesOrderedArray[$i]->{'name' . strtoupper(App::getLocale())} )
@@ -152,8 +152,11 @@
                             <div class="col-12 col-sm-6 py-2 border">
                                 <p class="text-uppercase font-weight-bold col-12 mb-0">{{$attributesNamesOrderedArray[$i]->{'name' . strtoupper(App::getLocale())} }}</p>
                             </div>
-                            <div class="col-12 col-sm-6 py-2 border">
+                            {{-- <div class="col-12 col-sm-6 py-2 border">
                                 <p class="text-uppercase font-weight-bold col-12 mb-0">{{$attributesNamesOrderedArray[$i]->values()->whereHas('products', function($query)use($product){$query->where('product_id', '=', $product->id);})->get()[$k]->{'value' . strtoupper(App::getLocale())} }}</p>
+                            </div> --}}
+                            <div class="col-12 col-sm-6 py-2 border">
+                                <p class="text-uppercase font-weight-bold col-12 mb-0">{{$attributesNamesOrderedArray[$i]->values()->whereHas('products', function($query)use($product){$query->where('product_id', '=', $product->id);})->get()[count($attributesNamesOrderedArray[$i]->values()->whereHas('products', function($query)use($product){$query->where('product_id', '=', $product->id);})->get())-1]->{'value' . strtoupper(App::getLocale())} }}</p>
                             </div>
                         </div>
                     @endfor

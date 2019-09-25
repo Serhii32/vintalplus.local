@@ -8,7 +8,7 @@ class ProductsAttributesName extends Model
 {
     public function products()
     {
-    	return $this->belongsToMany('App\Product', 'product_products_attributes_name', 'products_attributes_name_id', 'product_id')->withTimestamps();
+    	return $this->belongsToMany('App\Product', 'product_products_attributes_name', 'products_attributes_name_id', 'product_id')->withPivot('priority')->withTimestamps();
     }
 
     public function values()

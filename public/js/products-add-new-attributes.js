@@ -14,6 +14,8 @@ function addNewAttribute() {
     var pText = document.createTextNode("Характеристика "+attributeIterator);
     p.appendChild(pText);
 
+
+
     var deleteButtonDiv = document.createElement("div");
     deleteButtonDiv.setAttribute('class',"col-12 col-sm-6");
 
@@ -26,8 +28,36 @@ function addNewAttribute() {
 
     deleteButtonDiv.appendChild(deleteButton);
 
+
+
+    var priorityContainer = document.createElement("div");
+    priorityContainer.setAttribute('class',"row");
+    var priorityDiv = document.createElement("div");
+    priorityDiv.setAttribute('class',"col-12 col-sm-6 py-2");
+
+
+    var labelPriority = document.createElement("label");
+    labelPriority.setAttribute('class',"text-uppercase font-weight-bold col-12");
+    labelPriority.setAttribute('for',"attribute_priority_"+attributeIterator);
+
+    var labelPriorityText = document.createTextNode("Приоритет характеристики:");
+    labelPriority.appendChild(labelPriorityText);
+
+    var inputPriority = document.createElement("input");
+    inputPriority.setAttribute('type',"integer");
+    inputPriority.setAttribute('id',"attribute_priority_"+attributeIterator);
+    inputPriority.setAttribute('name',"attribute_priority_"+attributeIterator);
+    inputPriority.setAttribute('placeholder',"Приоритет характеристики");
+    inputPriority.setAttribute('class',"form-control");
+
+    priorityDiv.appendChild(labelPriority);
+    priorityDiv.appendChild(inputPriority);
+
+
     row1.appendChild(p);
     row1.appendChild(deleteButtonDiv);
+    row1.appendChild(priorityDiv);
+
     container.appendChild(row1);
 
     for (var langKey in languages) {

@@ -93,9 +93,20 @@
                                                 @php $previous = $attributesNamesOrderedArray[$i]->nameRU @endphp
                                                
                                                 <div class="col-12 col-sm-6">
-                                                    <a class="float-right btn btn-danger text-uppercase font-weight-bold" onclick="return confirm('Подтвердить удаление?')" href="{{route('admin.products.productAttributeDestroy', [$product->id, $attributesNamesOrderedArray[$i]->id, $attributesNamesOrderedArray[$i]->values()->whereHas('products', function($query)use($product){$query->where('product_id', '=', $product->id);})->get()[$k]->id])}}">Удалить</a>
+                                                    <a class="float-right btn btn-danger text-uppercase font-weight-bold" onclick="return confirm('Подтвердить удаление?')" href="{{route('admin.products.productAttributeDestroy', [$product->id, $attributesNamesOrderedArray[$i]->id, $attributesNamesOrderedArray[$i]->values()->whereHas('products', function($query)use($product){$query->where('product_id', '=', $product->id);})->get()[count($attributesNamesOrderedArray[$i]->values()->whereHas('products', function($query)use($product){$query->where('product_id', '=', $product->id);})->get())-1]->id])}}">Удалить</a>
                                                 </div>
 
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12 col-sm-6 py-2">
+                                                    <label class="text-uppercase font-weight-bold col-12" for="attribute_priority_{{$i+1}}">Приоритет характеристики:</label>
+                                                    <input type="number" id="attribute_priority_{{$i+1}}" name="attribute_priority_{{$i+1}}" placeholder="Приоритет характеристики" 
+                                                    @if($errors->has('attribute_priority_'.$i)) class="form-control is-invalid" 
+                                                    @else class="form-control"
+                                                    @endif 
+                                                    value="{{old('attribute_priority_'.$i) ?: $attributesNamesOrderedArray[$i]->pivot->priority}}">
+                                                    <span class="text-danger">{{ $errors->first('attribute_priority_'.$i) }}</span>
+                                                </div>
                                             </div>
                                             @foreach(LaravelLocalization::getLocalesOrder() as $code => $locale)
                                                 <div class="row">
@@ -114,7 +125,7 @@
                                                         @if($errors->has('attributes_values_'.strtoupper($code).'_'.$i)) class="form-control autocomplete-list-target-value{{strtoupper($code)}} is-invalid"
                                                         @else class="form-control autocomplete-list-target-value{{strtoupper($code)}}"
                                                         @endif
-                                                        value="{{old('attributes_values'.strtoupper($code).'.'.$i) ?: $attributesNamesOrderedArray[$i]->values()->whereHas('products', function($query)use($product){$query->where('product_id', '=', $product->id);})->get()[$k]->{'value'.strtoupper($code)} }}">
+                                                        value="{{old('attributes_values'.strtoupper($code).'.'.$i) ?: $attributesNamesOrderedArray[$i]->values()->whereHas('products', function($query)use($product){$query->where('product_id', '=', $product->id);})->get()[count($attributesNamesOrderedArray[$i]->values()->whereHas('products', function($query)use($product){$query->where('product_id', '=', $product->id);})->get())-1]->{'value'.strtoupper($code)} }}">
                                                         <span class="text-danger">{{ $errors->first('attributes_values_'.strtoupper($code).'_'.$i) }}</span>
                                                     </div>
                                                 </div>
@@ -129,6 +140,17 @@
                                                 <p class="text-uppercase font-weight-bold col-12 col-sm-6">Характеристика {{$i+1}}</p>
                                                 <div class="col-12 col-sm-6">
                                                     <a class="float-right btn btn-danger text-uppercase font-weight-bold" onclick="deleteAttribute('attribute{{$i+1}}')" href="javascript:void(0)">Удалить</a>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12 col-sm-6 py-2">
+                                                    <label class="text-uppercase font-weight-bold col-12" for="attribute_priority_{{$i+1}}">Приоритет характеристики:</label>
+                                                    <input type="number" id="attribute_priority_{{$i+1}}" name="attribute_priority_{{$i+1}}" placeholder="Приоритет характеристики" 
+                                                    @if($errors->has('attribute_priority_'.$i)) class="form-control is-invalid" 
+                                                    @else class="form-control"
+                                                    @endif 
+                                                    value="{{old('attribute_priority_'.$i)}}">
+                                                    <span class="text-danger">{{ $errors->first('attribute_priority_'.$i) }}</span>
                                                 </div>
                                             </div>
                                             @foreach(LaravelLocalization::getLocalesOrder() as $code => $locale)
